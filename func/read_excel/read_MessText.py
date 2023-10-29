@@ -10,7 +10,6 @@ async def read_MessText(user: User) -> str:
 
     mess = ""
     for row in df.to_dict("records"):
-        print(row)
         # если есть идентичная строчка пропускаем
         mess_text = await MessText.query.where(
             and_(MessText.name == row["name"], MessText.text == row["text"])

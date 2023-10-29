@@ -2,11 +2,8 @@ from aiogram.types import Message
 from aiogram import F
 
 from disp import dp, bot
-from func import delete_message, read_MessText
+from func import delete_message, read_MessText, read_Location
 from mdls import User
-
-
-NAMES = ["MessText.xlsx", "Location.xlsx", "PersonDefault.xlsx"]
 
 
 @dp.message(F.content_type.in_(["document"]))
@@ -22,6 +19,7 @@ async def update_base(message: Message):
 
     FUNC = {
         "MessText.xlsx": read_MessText(user),
+        "Location.xlsx": read_Location(user),
     }.get(str(message.document.file_name))
 
     if FUNC is None:

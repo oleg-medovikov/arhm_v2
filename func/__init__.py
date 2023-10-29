@@ -10,6 +10,7 @@ from .get_excel.get_all_Location import get_all_Location
 from .get_excel.get_all_PersonDefault import get_all_PersonDefault
 
 from .read_excel.read_MessText import read_MessText
+from .read_excel.read_Location import read_Location
 
 __all__ = [
     # system
@@ -25,4 +26,5 @@ __all__ = [
     "get_all_PersonDefault",
     # read_excel
     "read_MessText",
+    "read_Location",
 ]

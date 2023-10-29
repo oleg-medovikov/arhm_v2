@@ -10,7 +10,7 @@ class Location(db.Model):
     name = db.Column(db.String(length=40))
     declension = db.Column(db.String(length=40))
     contact_list = db.Column(db.ARRAY(db.SmallInteger()))
-    district = db.Column(db.String(length=20))
+    district = db.Column(db.String(length=40))
     district_id = db.Column(db.SmallInteger())
 
     u_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
