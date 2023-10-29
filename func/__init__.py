@@ -11,6 +11,8 @@ from .get_excel.get_all_PersonDefault import get_all_PersonDefault
 
 from .read_excel.read_MessText import read_MessText
 from .read_excel.read_Location import read_Location
+from .read_excel.read_PersonDefault import read_PersonDefault
+
 
 __all__ = [
     # system
@@ -27,4 +29,5 @@ __all__ = [
     # read_excel
     "read_MessText",
     "read_Location",
+    "read_PersonDefault",
 ]

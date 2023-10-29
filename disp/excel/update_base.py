@@ -2,7 +2,7 @@ from aiogram.types import Message
 from aiogram import F
 
 from disp import dp, bot
-from func import delete_message, read_MessText, read_Location
+from func import delete_message, read_MessText, read_Location, read_PersonDefault
 from mdls import User
 
 
@@ -20,6 +20,7 @@ async def update_base(message: Message):
     FUNC = {
         "MessText.xlsx": read_MessText(user),
         "Location.xlsx": read_Location(user),
+        "PersonDefaults": read_PersonDefault(user),
     }.get(str(message.document.file_name))
 
     if FUNC is None:
