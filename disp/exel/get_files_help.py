@@ -8,6 +8,7 @@ from mdls import User
 MESS = """*Доступные команды для редактирования базы:*
 
     /MessText
+    /Location
 
 """.replace(
     "_", "\\_"

@@ -4,12 +4,13 @@ from aiogram.types.input_file import BufferedInputFile
 
 
 from disp import dp
-from func import delete_message, write_styling_excel, get_all_MessText
+from func import delete_message, write_styling_excel, get_all_MessText, get_all_Location
 from mdls import User
 
 
 COMMANDS = [
     "MessText",
+    "Location",
 ]
 
 
@@ -25,6 +26,7 @@ async def get_files(message: Message):
 
     FUNC = {
         "MessText": get_all_MessText(),
+        "Location": get_all_Location(),
     }.get(COMMAND)
 
     if FUNC is None:
