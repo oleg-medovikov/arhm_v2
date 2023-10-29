@@ -9,6 +9,7 @@ MESS = """*Доступные команды для редактирования
 
     /MessText
     /Location
+    /PersonDefault
 
 """.replace(
     "_", "\\_"
