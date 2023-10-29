@@ -15,7 +15,7 @@ async def get_all_Location() -> "DataFrame":
                 Location.district,
                 Location.district_id,
                 User.fio,
-                Location.update,
+                Location.date_update,
             ]
         )
         .select_from(Location.outerjoin(User))
@@ -32,7 +32,7 @@ async def get_all_Location() -> "DataFrame":
             "district",
             "district_id",
             "fio",
-            "update",
+            "date_update",
         ],
     )
 

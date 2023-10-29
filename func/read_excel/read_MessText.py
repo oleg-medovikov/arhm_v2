@@ -24,14 +24,12 @@ async def read_MessText(user: User) -> str:
         ).gino.first()
         if mess_text is not None:
             await mess_text.update(
-                text=row["text"], u_id=user.id, update=datetime.now()
+                text=row["text"], u_id=user.id, date_update=datetime.now()
             ).apply()
-            mess += f"\n Обновил строку {mess_text.name}"
+            mess += f"\n Обновил строку {row['name']}"
             continue
         # если нет, то создаем новую строку
-        await MessText.create(
-            name=row["name"], text=row["text"], u_id=user.id, update=datetime.now()
-        )
+        await MessText.create(name=row["name"], text=row["text"], u_id=user.id)
         mess += f"\n Добавил строку {row['name']}"
 
     if mess == "":

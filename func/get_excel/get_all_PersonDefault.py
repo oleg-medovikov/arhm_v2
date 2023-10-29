@@ -28,7 +28,7 @@ async def get_all_PersonDefault() -> "DataFrame":
                 PersonDefault.luck_min,
                 PersonDefault.luck_max,
                 User.fio,
-                PersonDefault.update,
+                PersonDefault.date_update,
             ]
         )
         .select_from(PersonDefault.outerjoin(User))
@@ -58,7 +58,7 @@ async def get_all_PersonDefault() -> "DataFrame":
             "luck_min",
             "luck_max",
             "fio",
-            "update",
+            "date_update",
         ],
     )
 

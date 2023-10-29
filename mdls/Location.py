@@ -14,7 +14,7 @@ class Location(db.Model):
     district_id = db.Column(db.SmallInteger())
 
     u_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
-    update = db.Column(db.DateTime(), default=datetime.now())
+    date_update = db.Column(db.DateTime(), default=datetime.now())
 
     @property
     def user(self):

@@ -10,7 +10,7 @@ class MessText(db.Model):
     text = db.Column(db.String())
 
     u_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
-    update = db.Column(db.DateTime(), default=datetime.now())
+    date_update = db.Column(db.DateTime(), default=datetime.now())
 
     @property
     def user(self):
