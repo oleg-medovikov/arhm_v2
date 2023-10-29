@@ -6,6 +6,7 @@ from .start.start_new_game import start_new_game
 from .excel.get_files_help import get_files_help
 from .excel.get_files import get_files
 from .excel.update_base import update_base
+from .excel.get_all_emoji import get_all_emoji
 
 
 __all__ = [
@@ -18,4 +19,5 @@ __all__ = [
     "get_files_help",
     "get_files",
     "update_base",
+    "get_all_emoji",
 ]
