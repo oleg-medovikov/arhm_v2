@@ -1,12 +1,11 @@
 from aiogram.types import Message
 from aiogram.filters import Command
-from pandas import DataFrame
 from aiogram.types.input_file import BufferedInputFile
 
 
 from disp import dp
-from func import delete_message, write_styling_excel
-from mdls import User, MessText
+from func import delete_message, write_styling_excel, get_all_MessText
+from mdls import User
 
 
 COMMANDS = [
@@ -24,21 +23,14 @@ async def get_files(message: Message):
 
     COMMAND = str(message.text).replace("/", "")
 
-    LIST = {
-        "MessText": MessText.query.gino.all(),
+    FUNC = {
+        "MessText": get_all_MessText(),
     }.get(COMMAND)
 
-    COLUMNS = {
-        "MessText": ["name", "text", "date_update"],
-    }.get(COMMAND)
-
-    if LIST is None:
+    if FUNC is None:
         return None
 
-    LIST = await LIST
-
-    df = DataFrame(data=[_.to_dict() for _ in LIST])
-    df = df[COLUMNS]
+    df = await FUNC
 
     FILEPATH = f"/tmp/{COMMAND}.xlsx"
     FILENAME = FILEPATH.rsplit("/", 1)[-1]

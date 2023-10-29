@@ -10,6 +10,7 @@ async def on_startup():
     await db.set_bind(settings.PSQL)
     await db.gino.create_all()
     await set_default_commands(bot)
+    await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
 

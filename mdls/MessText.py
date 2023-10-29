@@ -8,4 +8,6 @@ class MessText(db.Model):
 
     name = db.Column(db.String(), primary_key=True)
     text = db.Column(db.String())
-    date_update = db.Column(db.DateTime(), default=datetime.now())
+
+    u_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
+    update = db.Column(db.DateTime(), default=datetime.now())
