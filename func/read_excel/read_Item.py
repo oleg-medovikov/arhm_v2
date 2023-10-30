@@ -33,9 +33,9 @@ async def read_Item(user: User) -> str:
     for row in df.to_dict("records"):
         # делаем из False false
         if row['demand'] is not None:
-            row['demand'] = loads(row['demand'].lower())
+            row['demand'] = loads(row['demand'].replace("'", '"').lower())
         if row['effect'] is not None:
-            row['effect'] = loads(row['effect'].lower())
+            row['effect'] = loads(row['effect'].replace("'", '"').lower())
 
         row['single_use'] = bool(row['single_use'])
         row['achievement'] = bool(row['achievement'])

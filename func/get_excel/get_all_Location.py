@@ -19,6 +19,7 @@ async def get_all_Location() -> "DataFrame":
             ]
         )
         .select_from(Location.outerjoin(User))
+        .order_by(Location.id)
         .gino.all()
     )
 

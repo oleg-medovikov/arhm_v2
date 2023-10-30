@@ -16,6 +16,7 @@ async def get_all_Sticker() -> "DataFrame":
             ]
         )
         .select_from(Sticker.outerjoin(User))
+        .order_by(Sticker.id)
         .gino.all()
     )
 

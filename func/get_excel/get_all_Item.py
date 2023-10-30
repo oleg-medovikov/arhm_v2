@@ -29,6 +29,7 @@ async def get_all_Item() -> "DataFrame":
             ]
         )
         .select_from(Item.outerjoin(User))
+        .order_by(Item.id)
         .gino.all()
     )
 

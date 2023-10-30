@@ -8,6 +8,7 @@ async def get_all_MessText() -> "DataFrame":
     DATA = (
         await db.select([MessText.name, MessText.text, User.fio, MessText.date_update])
         .select_from(MessText.outerjoin(User))
+        .order_by(MessText.name)
         .gino.all()
     )
 
