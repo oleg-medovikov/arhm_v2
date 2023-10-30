@@ -1,7 +1,7 @@
 from pandas import DataFrame
 
 from base import db
-from mdls import User, Item, Sticker
+from mdls import User, Item
 
 
 async def get_all_Item() -> "DataFrame":
@@ -10,7 +10,7 @@ async def get_all_Item() -> "DataFrame":
             [
                 Item.id,
                 Item.name,
-                Sticker.id,
+                Item.stick_id,
                 Item.description,
                 Item.mess_equip,
                 Item.mess_fail,
@@ -28,7 +28,7 @@ async def get_all_Item() -> "DataFrame":
                 Item.date_update,
             ]
         )
-        .select_from(Item.outerjoin(User).outerjoin(Sticker))
+        .select_from(Item.outerjoin(User))
         .gino.all()
     )
 
@@ -37,7 +37,7 @@ async def get_all_Item() -> "DataFrame":
         columns=[
             "id",
             "name",
-            "sticker",
+            "stick_id",
             "description",
             "mess_equip",
             "mess_fail",
