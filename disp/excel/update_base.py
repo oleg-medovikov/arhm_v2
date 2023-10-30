@@ -8,6 +8,7 @@ from func import (
     read_Location,
     read_PersonDefault,
     read_Sticker,
+    read_Item,
 )
 from mdls import User
 
@@ -28,6 +29,7 @@ async def update_base(message: Message):
         "Location.xlsx": read_Location(user),
         "PersonDefaults.xlsx": read_PersonDefault(user),
         "Sticker.xlsx": read_Sticker(user),
+        "Item.xlsx": read_Item(user),
     }.get(str(message.document.file_name))
 
     if FUNC is None:

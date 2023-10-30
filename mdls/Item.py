@@ -1,4 +1,5 @@
 from base import db
+from datetime import datetime
 
 
 class Item(db.Model):
@@ -7,21 +8,37 @@ class Item(db.Model):
 
     id = db.Column(db.SmallInteger(), primary_key=True)
     name = db.Column(db.String(length=40))
+    sticker = db.Column(db.SmallInteger(), db.ForeignKey("sticker.id"), nullable=True)
     description = db.Column(db.String())
+    mess_equip = db.Column(db.String(), nullable=True)
+    mess_fail = db.Column(db.String(), nullable=True)
+    mess_remove = db.Column(db.String(), nullable=True)
+    mess_drop = db.Column(db.String(), nullable=True)
+    type_kind = db.Column(db.String(length=30))
+    slot = db.Column(db.String(length=30))
+    emoji = db.Column(db.String(length=30))
+    effect = db.Column(db.JSON(), nullable=True)
+    demand = db.Column(db.JSON(), nullable=True)
+    cost = db.Column(db.SmallInteger(), nullable=True)
+    single_use = db.Column(db.Boolean())
+    achievement = db.Column(db.Boolean())
 
-    Column("i_id", SmallInteger, primary_key=True),  # номер предмета
-    Column("name", String),  # название предмета
-    Column("description", String),  # описание предмета
-    Column("equip_mess", String),  # сообщение при использовании
-    Column("fail_mess", String),  # сообщение если не удалось использовать
-    Column("remove_mess", String),  # сообщение когда снимаешь предмет
-    Column("drop_mess", String),  # сообщение когда выбрасываешь предмет
-    Column("i_type", String),  # Тип предмета
-    Column("slot", String),  # куда надевается предмет
-    Column("effect", String),  # json описывающий эффекты предмета
-    Column("demand", String),  # json описывающий требования предмета
-    Column("emoji", String),  # emoji иконка для данного предмета
-    Column("cost", SmallInteger),  # Стоимость предмета
-    Column("single_use", Boolean),  # одноразовость
-    Column("achievement", Boolean),  # Является ли медалью персонажа
-    Column("date_update", DateTime),  # Время обновления предмета админом
+    u_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
+    date_update = db.Column(db.DateTime(), default=datetime.now())
+
+    @property
+    def sticker(self):
+        """The sticker property."""
+        return self._sticker
+
+    @sticker.setter
+    def sticker(self, value):
+        self._sticker = value
+
+    @property
+    def user(self):
+        return self._users
+
+    @user.setter
+    def user(self, value):
+        self._users = value

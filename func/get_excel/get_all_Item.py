@@ -1,0 +1,59 @@
+from pandas import DataFrame
+
+from base import db
+from mdls import User, Item, Sticker
+
+
+async def get_all_Item() -> "DataFrame":
+    DATA = (
+        await db.select(
+            [
+                Item.id,
+                Item.name,
+                Sticker.id,
+                Item.description,
+                Item.mess_equip,
+                Item.mess_fail,
+                Item.mess_remove,
+                Item.mess_drop,
+                Item.type_kind,
+                Item.slot,
+                Item.emoji,
+                Item.effect,
+                Item.demand,
+                Item.cost,
+                Item.single_use,
+                Item.achievement,
+                User.fio,
+                Item.date_update,
+            ]
+        )
+        .select_from(Item.outerjoin(User).outerjoin(Sticker))
+        .gino.all()
+    )
+
+    df = DataFrame(
+        data=DATA,
+        columns=[
+            "id",
+            "name",
+            "sticker",
+            "description",
+            "mess_equip",
+            "mess_fail",
+            "mess_remove",
+            "mess_drop",
+            "type_kind",
+            "slot",
+            "emoji",
+            "effect",
+            "demand",
+            "cost",
+            "single_use",
+            "achievement",
+            "fio",
+            "date_update",
+        ],
+    )
+
+    return df
