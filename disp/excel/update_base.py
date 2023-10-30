@@ -2,7 +2,13 @@ from aiogram.types import Message
 from aiogram import F
 
 from disp import dp, bot
-from func import delete_message, read_MessText, read_Location, read_PersonDefault
+from func import (
+    delete_message,
+    read_MessText,
+    read_Location,
+    read_PersonDefault,
+    read_Sticker,
+)
 from mdls import User
 
 
@@ -20,7 +26,8 @@ async def update_base(message: Message):
     FUNC = {
         "MessText.xlsx": read_MessText(user),
         "Location.xlsx": read_Location(user),
-        "PersonDefaults": read_PersonDefault(user),
+        "PersonDefaults.xlsx": read_PersonDefault(user),
+        "Sticker.xlsx": read_Sticker(user),
     }.get(str(message.document.file_name))
 
     if FUNC is None:
@@ -37,5 +44,5 @@ async def update_base(message: Message):
         )
     else:
         return await message.answer(
-            mess, disable_notification=True, parse_mode="Markdown"
+            mess.replace("_", "\\_"), disable_notification=True, parse_mode="Markdown"
         )

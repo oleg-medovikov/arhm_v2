@@ -10,11 +10,12 @@ from func import (
     get_all_MessText,
     get_all_Location,
     get_all_PersonDefault,
+    get_all_Sticker,
 )
 from mdls import User
 
 
-COMMANDS = ["MessText", "Location", "PersonDefault"]
+COMMANDS = ["MessText", "Location", "PersonDefault", "Sticker"]
 
 
 @dp.message(Command(commands=COMMANDS))
@@ -31,6 +32,7 @@ async def get_files(message: Message):
         "MessText": get_all_MessText(),
         "Location": get_all_Location(),
         "PersonDefault": get_all_PersonDefault(),
+        "Sticker": get_all_Sticker(),
     }.get(COMMAND)
 
     if FUNC is None:

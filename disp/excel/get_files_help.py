@@ -10,6 +10,7 @@ MESS = """*Доступные команды для редактирования
     /MessText
     /Location
     /PersonDefault
+    /Sticker
 
     /get_emoji
 
