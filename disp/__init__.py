@@ -8,6 +8,7 @@ from .excel.get_files import get_files
 from .excel.update_base import update_base
 from .excel.get_all_emoji import get_all_emoji
 from .excel.get_sticker_id import get_sticker_id
+from .excel.watch_sticker import watch_sticker
 
 
 __all__ = [
@@ -22,4 +23,5 @@ __all__ = [
     "update_base",
     "get_all_emoji",
     "get_sticker_id",
+    "watch_sticker",
 ]
