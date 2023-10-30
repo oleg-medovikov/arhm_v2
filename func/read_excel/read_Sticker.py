@@ -9,6 +9,9 @@ async def read_Sticker(user: User) -> str:
 
     mess = ""
     for row in df.to_dict("records"):
+        # удаляем лишние пробелы, это важно!
+        row["sticker_id"] = row["sticker_id"].strip()
+
         # если есть идентичная строчка пропускаем
         sticker = await Sticker.query.where(
             and_(Sticker.name == row["name"], Sticker.sticker_id == row["sticker_id"])
