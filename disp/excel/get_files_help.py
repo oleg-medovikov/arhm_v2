@@ -1,9 +1,10 @@
+from disp.excel import router
 from aiogram.types import Message
 from aiogram.filters import Command
 
-from disp import dp
 from func import delete_message
 from mdls import User
+
 
 MESS = """*Доступные команды для редактирования базы:*
 
@@ -20,7 +21,7 @@ MESS = """*Доступные команды для редактирования
 )
 
 
-@dp.message(Command("files"))
+@router.message(Command("files"))
 async def get_files_help(message: Message):
     await delete_message(message)
 

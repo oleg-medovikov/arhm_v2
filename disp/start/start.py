@@ -1,12 +1,13 @@
 from aiogram.types import Message
 from aiogram.filters import CommandStart
 
-from disp import dp
 from func import delete_message, get_chat_fio, add_keyboard
 from mdls import MessText, User
 
+from disp.start import router
 
-@dp.message(CommandStart())
+
+@router.message(CommandStart())
 async def command_start_handler(message: Message):
     await delete_message(message)
 

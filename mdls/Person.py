@@ -8,8 +8,8 @@ class Person(db.Model):
 
     id = db.Column(db.Integer(), primary_key=True)
     u_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
-    loc_id = db.Column(db.SmaInteger(), db.ForeignKey("location.id"))
-    i_id = db.Column(db.SmaInteger(), db.ForeignKey("inventory.id"))
+    loc_id = db.Column(db.SmallInteger(), db.ForeignKey("location.id"))
+    i_id = db.Column(db.Integer(), db.ForeignKey("inventory.id"))
 
     gamename = db.Column(db.String(length=50))
     create_date = db.Column(db.DateTime(), default=datetime.now())
@@ -40,3 +40,30 @@ class Person(db.Model):
 
     hunger = db.Column(db.SmallInteger())
     weary = db.Column(db.SmallInteger())
+
+    @property
+    def user(self):
+        """The user property."""
+        return self._user
+
+    @user.setter
+    def user(self, value):
+        self._user = value
+
+    @property
+    def location(self):
+        """The location property."""
+        return self._location
+
+    @location.setter
+    def location(self, value):
+        self._location = value
+
+    @property
+    def inventory(self):
+        """The inventory property."""
+        return self._inventory
+
+    @inventory.setter
+    def inventory(self, value):
+        self._inventory = value

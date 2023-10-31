@@ -1,7 +1,7 @@
+from disp.excel import router
 from aiogram.types import Message
-from aiogram import F
+from aiogram import F, Bot
 
-from disp import dp, bot
 from func import (
     delete_message,
     read_MessText,
@@ -13,8 +13,8 @@ from func import (
 from mdls import User
 
 
-@dp.message(F.content_type.in_(["document"]))
-async def update_base(message: Message):
+@router.message(F.content_type.in_(["document"]))
+async def update_base(message: Message, bot: Bot):
     await delete_message(message)
 
     user = await User.query.where(User.tg_id == message.chat.id).gino.first()
@@ -27,7 +27,7 @@ async def update_base(message: Message):
     FUNC = {
         "MessText.xlsx": read_MessText(user),
         "Location.xlsx": read_Location(user),
-        "PersonDefaults.xlsx": read_PersonDefault(user),
+        "PersonDefault.xlsx": read_PersonDefault(user),
         "Sticker.xlsx": read_Sticker(user),
         "Item.xlsx": read_Item(user),
     }.get(str(message.document.file_name))

@@ -1,5 +1,3 @@
-from .dispetcher import dp, bot
-
 from .start.start import command_start_handler
 from .start.start_new_game import start_new_game
 
@@ -12,8 +10,6 @@ from .excel.watch_sticker import watch_sticker
 
 
 __all__ = [
-    "dp",
-    "bot",
     # start
     "command_start_handler",
     "start_new_game",

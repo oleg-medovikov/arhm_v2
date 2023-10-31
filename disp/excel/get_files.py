@@ -1,9 +1,8 @@
+from disp.excel import router
 from aiogram.types import Message
 from aiogram.filters import Command
 from aiogram.types.input_file import BufferedInputFile
 
-
-from disp import dp
 from func import (
     delete_message,
     write_styling_excel,
@@ -19,7 +18,7 @@ from mdls import User
 COMMANDS = ["MessText", "Location", "PersonDefault", "Sticker", "Item"]
 
 
-@dp.message(Command(commands=COMMANDS))
+@router.message(Command(commands=COMMANDS))
 async def get_files(message: Message):
     await delete_message(message)
 

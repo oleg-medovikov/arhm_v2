@@ -1,13 +1,13 @@
+from disp.excel import router
 from aiogram.types import Message
-from aiogram import F
+from aiogram import F, Bot
 
-from disp import dp, bot
 from func import delete_message
 from mdls import User, Sticker
 
 
-@dp.message(F.text.startswith("sticker"))
-async def watch_sticker(message: Message):
+@router.message(F.text.startswith("sticker"))
+async def watch_sticker(message: Message, bot: Bot):
     await delete_message(message)
 
     user = await User.query.where(User.tg_id == message.chat.id).gino.first()

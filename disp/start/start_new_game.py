@@ -1,11 +1,13 @@
 from aiogram.types import CallbackQuery
 from aiogram import F
 
-from disp import dp
 from func import add_keyboard, update_message
+from mdls import User, Person
+
+from disp.start import router
 
 
-@dp.callback_query(F.data == "start_new_game")
+@router.callback_query(F.data == "start_new_game")
 async def start_new_game(callback: CallbackQuery):
     """
     Если есть живой персонаж, говорим, что уже видели игрока, предлагаем

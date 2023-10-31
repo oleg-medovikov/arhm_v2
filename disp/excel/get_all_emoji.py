@@ -1,13 +1,13 @@
+from disp.excel import router
 from aiogram.types import Message
 from aiogram.filters import Command
 
-from disp import dp
 from func import delete_message
 from mdls import User
 from conf import emoji_all, emoji
 
 
-@dp.message(Command("get_emoji"))
+@router.message(Command("get_emoji"))
 async def get_all_emoji(message: Message):
     await delete_message(message)
 

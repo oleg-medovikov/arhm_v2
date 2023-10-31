@@ -1,13 +1,13 @@
+from disp.excel import router
+from aiogram import F, Bot
 from aiogram.types import Message
-from aiogram import F
 
-from disp import dp, bot
 from func import delete_message
 from mdls import User
 
 
-@dp.message(F.content_type.in_(["sticker"]))
-async def get_sticker_id(message: Message):
+@router.message(F.content_type.in_(["sticker"]))
+async def get_sticker_id(message: Message, bot: Bot):
     await delete_message(message)
 
     user = await User.query.where(User.tg_id == message.chat.id).gino.first()

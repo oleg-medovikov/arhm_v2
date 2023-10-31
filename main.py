@@ -1,12 +1,26 @@
+import logging
 import asyncio
+from aiogram import Bot, Dispatcher
+from aiogram.fsm.storage.memory import MemoryStorage
 
-from disp import dp, bot
+from conf import settings
 from base import db
 from func import set_default_commands
-from conf import settings
+from disp import start, excel
+
+
+logging.basicConfig(level=logging.INFO)
+# logging.getLogger("schedule").propagate = False
+# logging.getLogger("schedule").addHandler(logging.NullHandler())
+# logging.getLogger("gino.engine._SAEngine").setLevel(logging.ERROR)
 
 
 async def on_startup():
+    bot = Bot(token=settings.BOT_API)
+    dp = Dispatcher(storage=MemoryStorage())
+    dp.include_router(start.router)
+    dp.include_router(excel.router)
+
     await db.set_bind(settings.PSQL)
     await db.gino.create_all()
     await set_default_commands(bot)
