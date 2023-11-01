@@ -1,10 +1,9 @@
+from disp.start import router
 from aiogram.types import Message
 from aiogram.filters import CommandStart
 
 from func import delete_message, get_chat_fio, add_keyboard
 from mdls import MessText, User
-
-from disp.start import router
 
 
 @router.message(CommandStart())

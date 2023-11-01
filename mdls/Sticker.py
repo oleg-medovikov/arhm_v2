@@ -8,7 +8,9 @@ class Sticker(db.Model):
 
     id = db.Column(db.SmallInteger(), primary_key=True)
     name = db.Column(db.String())
-    sticker_id = db.Column(db.String())
+    category = db.Column(db.String())
+    unique_id = db.Column(db.String())
+    send_id = db.Column(db.String())
 
     u_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
     date_update = db.Column(db.DateTime(), default=datetime.now())

@@ -10,7 +10,9 @@ async def get_all_Sticker() -> "DataFrame":
             [
                 Sticker.id,
                 Sticker.name,
-                Sticker.sticker_id,
+                Sticker.category,
+                Sticker.unique_id,
+                Sticker.send_id,
                 User.fio,
                 Sticker.date_update,
             ]
@@ -21,7 +23,16 @@ async def get_all_Sticker() -> "DataFrame":
     )
 
     df = DataFrame(
-        data=DATA, columns=["id", "name", "sticker_id", "fio", "date_update"]
+        data=DATA,
+        columns=[
+            "id",
+            "name",
+            "category",
+            "unique_id",
+            "send_id",
+            "fio",
+            "date_update",
+        ],
     )
 
     return df

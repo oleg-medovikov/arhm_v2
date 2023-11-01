@@ -8,6 +8,7 @@ from mdls import User, Sticker
 
 @router.message(F.text.startswith("sticker"))
 async def watch_sticker(message: Message, bot: Bot):
+    "посмотреть стикер по номеру"
     await delete_message(message)
 
     user = await User.query.where(User.tg_id == message.chat.id).gino.first()
@@ -30,6 +31,6 @@ async def watch_sticker(message: Message, bot: Bot):
             mess, disable_notification=True, parse_mode="Markdown"
         )
 
-    await bot.send_sticker(message.chat.id, sticker=sticker.sticker_id)
+    await bot.send_sticker(message.chat.id, sticker=sticker.send_id)
     mess = f"id: {sticker.id}  " + sticker.name
     await message.answer(mess, disable_notification=True, parse_mode="Markdown")

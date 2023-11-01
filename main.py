@@ -18,8 +18,7 @@ logging.basicConfig(level=logging.INFO)
 async def on_startup():
     bot = Bot(token=settings.BOT_API)
     dp = Dispatcher(storage=MemoryStorage())
-    dp.include_router(start.router)
-    dp.include_router(excel.router)
+    dp.include_routers(start.router, excel.router)
 
     await db.set_bind(settings.PSQL)
     await db.gino.create_all()
