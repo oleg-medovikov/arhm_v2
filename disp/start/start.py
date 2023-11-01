@@ -1,13 +1,14 @@
 from disp.start import router
 from aiogram.types import Message
 from aiogram.filters import CommandStart
+from aiogram import Bot
 
 from func import delete_message, get_chat_fio, add_keyboard
-from mdls import MessText, User
+from mdls import MessText, User, Sticker
 
 
 @router.message(CommandStart())
-async def command_start_handler(message: Message):
+async def command_start_handler(message: Message, bot: Bot):
     await delete_message(message)
 
     user = await User.query.where(User.tg_id == message.chat.id).gino.first()
@@ -19,4 +20,8 @@ async def command_start_handler(message: Message):
         "Согласиться": "start_new_game",
     }
     keyboard = add_keyboard(DICT)
+    sticker = await Sticker.query.where(Sticker.name == "ктулху").gino.first()
+    if sticker is not None:
+        await bot.send_sticker(message.chat.id, sticker=sticker.send_id)
+
     return await message.answer(mess.text, reply_markup=keyboard)

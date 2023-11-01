@@ -32,7 +32,7 @@ async def get_sticker_id(message: Message, bot: Bot):
         await message.answer(
             mess.replace("_", "\\_"), disable_notification=True, parse_mode="Markdown"
         )
-        return bot.send_sticker(message.chat.id, sticker=file_id)
+        return await bot.send_sticker(message.chat.id, sticker=file_id)
 
     # если стикера нет в базе, то закидываем его в базу
     # и спрашиваем название у пользователя
@@ -48,7 +48,7 @@ async def get_sticker_id(message: Message, bot: Bot):
         ).pack()
     }
 
-    # await bot.send_sticker(message.chat.id, sticker=file_id)
+    await bot.send_sticker(message.chat.id, sticker=file_id)
     return await message.answer(
         mess,
         reply_markup=add_keyboard(DICT),
