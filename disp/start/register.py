@@ -3,13 +3,12 @@ import asyncio
 from aiogram.types import CallbackQuery
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-from aiogram.types import Message
 from aiogram import F, Bot
 from aiogram.enums.dice_emoji import DiceEmoji
 
-from func import update_message, add_keyboard, delete_message
-from mdls import MessText, Sticker
-from call import CallSex, CallProfession
+from func import update_message, add_keyboard
+from mdls import MessText, Sticker, PersonName
+from call import CallSex, CallProfession, CallGamename
 
 
 class NewPerson(StatesGroup):
@@ -68,45 +67,36 @@ async def register_3_ask_gamename(
 ):
     profession = callback_data.profession
     await state.update_data(profession=profession)
-    
+
     mess = await MessText.get(f"register_name_{profession}")
-    msg = await update_message(callback.message, mess.text, None)
+    names = await PersonName.query.where(PersonName.profession == profession).gino.all()
+    DICT = {}
+    for name in names: 
+        DICT[name.gamename] = CallGamename(action='ask_gamename', gamename=name.gamename).pack()
 
-    await state.update_data(msg=callback.message)
-    
-    await state.set_state(NewPerson.gamename)
+    return await update_message(callback.message, mess.text, add_keyboard(DICT))
 
 
-@router.message(NewPerson.gamename)
-async def register_4_ask_destination(message: Message, state: FSMContext, bot: Bot):
-    # await delete_message(message)
-
-    gamename = str(message.text)
-    if len(gamename) > 50:
-        gamename = gamename[:50]
-        mess = await MessText.get("gamename_to_long")
-    else:
-        mess = await MessText.get("register_ask_destination")
-
+@router.callback_query(CallGamename.filter(F.action == "ask_gamename"))
+async def register_4_ask_destination(callback: CallbackQuery, callback_data: CallGamename, state: FSMContext):
+    gamename = callback_data.gamename
     await state.update_data(gamename=gamename)
+    mess = await MessText.get("register_ask_destination")
     user_data = await state.get_data()
-    msg = user_data['msg']
-
-    await msg.delete()
-    #await update_message(message, mess.text, None)
+    destination = await MessText.get(f"register_destination_{user_data['profession']}")
+    DICT = {
+            destination.text: 'register_destination'
+            }
+    await update_message(callback.message, mess.text, add_keyboard(DICT))
     #await state.set_state(NewPerson.destination)
 
 
-    
-
-@router.message(NewPerson.destination)
-async def register_5_ask_dise(message: Message, state: FSMContext):
-    destination = str(message.text)[:256]
-    await state.update_data(destination=destination)
+@router.callback_query(F.data == "register_destination")
+async def register_5_ask_dise(callback: CallbackQuery, state: FSMContext):
     user_data = await state.get_data()
     mess = await MessText.get(f"register_dise_{user_data['profession']}")
     DICT = {"Отдать письмо": "register_dice"}
-    await update_message(message, mess.text, add_keyboard(DICT))
+    await update_message(callback.message, mess.text, add_keyboard(DICT))
 
 
 @router.callback_query(F.data == "register_dice")
