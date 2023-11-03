@@ -5,7 +5,7 @@ from .start.register import (
     register_2_ask_profession,
     register_3_ask_gamename,
     register_4_ask_destination,
-    register_5_ask_dise,
+    register_5_ask_dice,
     register_6_end,
 )
 
@@ -31,7 +31,7 @@ __all__ = [
     "register_2_ask_profession",
     "register_3_ask_gamename",
     "register_4_ask_destination",
-    "register_5_ask_dise",
+    "register_5_ask_dice",
     "register_6_end",
     # excel
     "get_files_help",

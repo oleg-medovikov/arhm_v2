@@ -1,3 +1,4 @@
+from sqlalchemy.sql.functions import user
 from disp.start import router
 import asyncio
 from aiogram.types import CallbackQuery
@@ -17,7 +18,7 @@ class NewPerson(StatesGroup):
     sex = State()
     profession = State()
     destination = State()
-    dise = State()
+    dice = State()
 
 
 @router.callback_query(F.data == "register")
@@ -63,7 +64,7 @@ async def register_2_ask_profession(
 
 @router.callback_query(CallProfession.filter(F.action == "ask_profession"))
 async def register_3_ask_gamename(
-    callback: CallbackQuery, callback_data: CallProfession, state: FSMContext
+        callback: CallbackQuery, callback_data: CallProfession, state: FSMContext, bot: Bot
 ):
     profession = callback_data.profession
     await state.update_data(profession=profession)
@@ -74,6 +75,11 @@ async def register_3_ask_gamename(
     for name in names: 
         DICT[name.gamename] = CallGamename(action='ask_gamename', gamename=name.gamename).pack()
 
+    sticker = await Sticker.query.where(Sticker.name == 'шериф').gino.first()
+    if sticker is not None:
+        await bot.delete_chat_sticker_set(callback.from_user.id)
+        await bot.send_sticker(callback.from_user.id, sticker=sticker.send_id)
+
     return await update_message(callback.message, mess.text, add_keyboard(DICT))
 
 
@@ -81,8 +87,8 @@ async def register_3_ask_gamename(
 async def register_4_ask_destination(callback: CallbackQuery, callback_data: CallGamename, state: FSMContext):
     gamename = callback_data.gamename
     await state.update_data(gamename=gamename)
-    mess = await MessText.get("register_ask_destination")
     user_data = await state.get_data()
+    mess = await MessText.get(f"register_ask_destination_{user_data['profession']}")
     destination = await MessText.get(f"register_destination_{user_data['profession']}")
     DICT = {
             destination.text: 'register_destination'
@@ -92,17 +98,32 @@ async def register_4_ask_destination(callback: CallbackQuery, callback_data: Cal
 
 
 @router.callback_query(F.data == "register_destination")
-async def register_5_ask_dise(callback: CallbackQuery, state: FSMContext):
+async def register_5_ask_dice(callback: CallbackQuery, state: FSMContext):
     user_data = await state.get_data()
-    mess = await MessText.get(f"register_dise_{user_data['profession']}")
+    mess = await MessText.get(f"register_dice_{user_data['profession']}")
     DICT = {"Отдать письмо": "register_dice"}
     await update_message(callback.message, mess.text, add_keyboard(DICT))
 
 
 @router.callback_query(F.data == "register_dice")
-async def register_6_end(callback_query: CallbackQuery, state: FSMContext, bot: Bot):
-    msg = await bot.send_dice(callback_query.message.chat.id, emoji=DiceEmoji.DICE)
-    await state.update_data(dice=msg.dice.value)
-    await asyncio.sleep(3)
-    mess = f"Вам выпало {msg.dice.value}"
-    await update_message(callback_query.message, mess, None)
+async def register_6_end(callback: CallbackQuery, state: FSMContext, bot:Bot):
+    msg = await bot.send_dice(callback.from_user.id, emoji=DiceEmoji.DICE)
+    if msg.dice is not None:
+        value = msg.dice.value
+    else:
+        value = 1
+    await state.update_data(dice=value)
+    await asyncio.sleep(4)
+    user_data = await state.get_data()
+
+    mess_name = {
+            1: f'register_dice_{user_data["profession"]}_1-2',    
+            2: f'register_dice_{user_data["profession"]}_1-2',    
+            3: f'register_dice_{user_data["profession"]}_3-4',    
+            4: f'register_dice_{user_data["profession"]}_3-4',    
+            5: f'register_dice_{user_data["profession"]}_5-6',    
+            6: f'register_dice_{user_data["profession"]}_5-6',    
+            }[value]
+
+    mess = await MessText.get(mess_name)
+    await update_message(callback.message, mess.text, None)

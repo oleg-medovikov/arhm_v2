@@ -7,7 +7,7 @@ from mdls import User, MessText
 
 async def read_MessText(user: User) -> str:
     df = read_excel("/tmp/_MessText.xlsx", usecols=["name", "text"])
-
+    df["text"] = df["text"].str.replace("\u2028", "\n")
     mess = ""
     for row in df.to_dict("records"):
         # если есть идентичная строчка пропускаем
