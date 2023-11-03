@@ -1,4 +1,4 @@
-from aiogram.exceptions import TelegramNotFound
+from aiogram.exceptions import TelegramNotFound, TelegramBadRequest
 from aiogram.types import Message
 
 
@@ -8,4 +8,6 @@ async def delete_message(message: Message) -> None:
     try:
         await message.delete()
     except TelegramNotFound:
+        pass
+    except TelegramBadRequest:
         pass

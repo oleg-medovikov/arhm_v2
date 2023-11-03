@@ -5,23 +5,30 @@ from aiogram import Bot
 
 from func import delete_message, get_chat_fio, add_keyboard
 from mdls import MessText, User, Sticker
+from call import CallUser
 
 
 @router.message(CommandStart())
 async def command_start_handler(message: Message, bot: Bot):
+    """
+    начало, тут нужно записать юзера, если он еще не записан
+    ну и показать дисклеймер
+    """
     await delete_message(message)
 
     user = await User.query.where(User.tg_id == message.chat.id).gino.first()
     if user is None:
-        await User.create(tg_id=message.chat.id, fio=get_chat_fio(message), admin=False)
+        user = await User.create(
+            tg_id=message.chat.id, fio=get_chat_fio(message), admin=False
+        )
 
     mess = await MessText.query.where(MessText.name == "disclaimer").gino.first()
     DICT = {
-        "Согласиться": "start_new_game",
+        "Согласиться": CallUser(action="start_new_game", user_id=user.id).pack(),
     }
-    keyboard = add_keyboard(DICT)
+
     sticker = await Sticker.query.where(Sticker.name == "ктулху").gino.first()
     if sticker is not None:
         await bot.send_sticker(message.chat.id, sticker=sticker.send_id)
 
-    return await message.answer(mess.text, reply_markup=keyboard)
+    return await message.answer(mess.text, reply_markup=add_keyboard(DICT))

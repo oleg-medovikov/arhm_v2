@@ -1,4 +1,4 @@
-from disp.start import router
+from disp.excel import router
 from aiogram.types import CallbackQuery
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
@@ -10,7 +10,7 @@ from mdls import Sticker
 
 
 class NewSticker(StatesGroup):
-    sticker_id: State()
+    sticker_id = State()
     name = State()
     category = State()
 
@@ -19,16 +19,9 @@ class NewSticker(StatesGroup):
 async def ask_sticker_name(
     callback: CallbackQuery, callback_data: CallSticker, state: FSMContext
 ):
-    print("callback_data")
-    # await callback.message.edit_reply_markup(reply_markup=None)
+    await state.update_data(sticker_id=callback_data.sticker_id)
 
-    s_id = callback_data.sticker_id
-
-    await state.update_data(sticker_id=s_id)
-
-    await callback.message.answer(
-        "Напишите название стикера:",
-    )
+    await callback.message.answer("Напишите название стикера:")
     # Устанавливаем пользователю состояние "пишет название"
     await state.set_state(NewSticker.name)
 
@@ -53,5 +46,4 @@ async def update_sticker(message: Message, state: FSMContext):
 
     # Сброс состояния и сохранённых данных у пользователя
     await state.clear()
-
     return await message.answer(f'Стикер сохранен\nid: {user_data["sticker_id"]}')

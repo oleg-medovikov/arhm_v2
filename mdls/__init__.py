@@ -6,6 +6,7 @@ from .Location import Location
 from .Sticker import Sticker
 from .Item import Item
 from .Person import Person
+from .PersonName import PersonName
 
 __all__ = [
     "User",
@@ -16,4 +17,5 @@ __all__ = [
     "Sticker",
     "Item",
     "Person",
+    "PersonName",
 ]

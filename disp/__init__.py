@@ -1,5 +1,14 @@
 from .start.start import command_start_handler
 from .start.start_new_game import start_new_game
+from .start.register import (
+    register_1_ask_sex,
+    register_2_ask_profession,
+    register_3_ask_gamename,
+    register_4_ask_destination,
+    register_5_ask_dise,
+    register_6_end,
+)
+
 
 from .excel.get_files_help import get_files_help
 from .excel.get_files import get_files
@@ -18,6 +27,12 @@ __all__ = [
     # start
     "command_start_handler",
     "start_new_game",
+    "register_1_ask_sex",
+    "register_2_ask_profession",
+    "register_3_ask_gamename",
+    "register_4_ask_destination",
+    "register_5_ask_dise",
+    "register_6_end",
     # excel
     "get_files_help",
     "get_files",
