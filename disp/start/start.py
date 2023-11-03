@@ -2,10 +2,9 @@ from disp.start import router
 from aiogram.types import Message
 from aiogram.filters import CommandStart
 from aiogram import Bot
-import asyncio
 
-from func import delete_message, get_chat_fio, add_keyboard
-from mdls import MessText, User, Sticker
+from func import delete_message, get_chat_fio, add_keyboard, update_sticker
+from mdls import MessText, User
 from call import CallUser
 
 
@@ -28,12 +27,6 @@ async def command_start_handler(message: Message, bot: Bot):
         "Согласиться": CallUser(action="start_new_game", user_id=user.id).pack(),
     }
 
-    sticker = await Sticker.query.where(Sticker.name == "ктулху").gino.first()
-    if sticker is not None:
-        STICKER = await bot.send_sticker(message.chat.id, sticker=sticker.send_id)
-
-    await asyncio.sleep(3)
-
-    await bot.delete_message(message.chat.id, STICKER.message_id)
+    await update_sticker(message.chat.id, "ктулху", bot)
 
     return await message.answer(mess.text, reply_markup=add_keyboard(DICT))

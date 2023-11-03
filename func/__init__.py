@@ -4,6 +4,7 @@ from .system.get_chat_fio import get_chat_fio
 from .system.write_styling_excel import write_styling_excel
 from .system.add_keyboard import add_keyboard
 from .system.update_message import update_message
+from .system.update_sticker import update_sticker
 
 from .get_excel.get_all_MessText import get_all_MessText
 from .get_excel.get_all_Location import get_all_Location
@@ -26,6 +27,7 @@ __all__ = [
     "write_styling_excel",
     "add_keyboard",
     "update_message",
+    "update_sticker",
     # get_excel
     "get_all_MessText",
     "get_all_Location",

@@ -4,6 +4,7 @@ from .Inventory import Inventory
 from .PersonDefault import PersonDefault
 from .Location import Location
 from .Sticker import Sticker
+from .StickerLog import StickerLog
 from .Item import Item
 from .Person import Person
 from .PersonName import PersonName
@@ -15,6 +16,7 @@ __all__ = [
     "Location",
     "PersonDefault",
     "Sticker",
+    "StickerLog",
     "Item",
     "Person",
     "PersonName",

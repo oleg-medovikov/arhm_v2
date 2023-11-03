@@ -1,4 +1,3 @@
-from sqlalchemy.sql.functions import user
 from disp.start import router
 import asyncio
 from aiogram.types import CallbackQuery
@@ -7,7 +6,7 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram import F, Bot
 from aiogram.enums.dice_emoji import DiceEmoji
 
-from func import update_message, add_keyboard
+from func import update_message, add_keyboard, update_sticker
 from mdls import MessText, Sticker, PersonName
 from call import CallSex, CallProfession, CallGamename
 
@@ -75,11 +74,7 @@ async def register_3_ask_gamename(
     for name in names: 
         DICT[name.gamename] = CallGamename(action='ask_gamename', gamename=name.gamename).pack()
 
-    sticker = await Sticker.query.where(Sticker.name == 'шериф').gino.first()
-    if sticker is not None:
-        await bot.delete_chat_sticker_set(callback.from_user.id)
-        await bot.send_sticker(callback.from_user.id, sticker=sticker.send_id)
-
+    await update_sticker(callback.from_user.id, 'шериф', bot)
     return await update_message(callback.message, mess.text, add_keyboard(DICT))
 
 
