@@ -7,30 +7,30 @@ from aiogram import F, Bot
 from aiogram.enums.dice_emoji import DiceEmoji
 
 from func import update_message, add_keyboard, update_sticker
-from mdls import MessText, Sticker, PersonName
-from call import CallSex, CallProfession, CallGamename
+from func.system.delete_message import delete_message
+from mdls import MessText, PersonName
+from call import CallUser, CallSex, CallProfession, CallGamename
 
 
 class NewPerson(StatesGroup):
-    msg = State()
+    user_id = State()
     gamename = State()
     sex = State()
     profession = State()
-    destination = State()
     dice = State()
 
 
-@router.callback_query(F.data == "register")
-async def register_1_ask_sex(callback: CallbackQuery, state: FSMContext):
+@router.callback_query(CallUser.filter(F.action == "register"))
+async def register_1_ask_sex(callback: CallbackQuery, callback_data: CallUser, state: FSMContext):
+    user_id = callback_data.user_id
+    await state.update_data(user_id=user_id)
     mess = await MessText.get("register_sex")
 
     DICT = {
         "Мужчина": CallSex(action="ask_sex", sex=True).pack(),
         "Женщина": CallSex(action="ask_sex", sex=False).pack(),
     }
-    await update_message(callback.message, mess.text, add_keyboard(DICT))
-    # Устанавливаем пользователю состояние "пишет название"
-    # await state.set_state(NewPerson.sex)
+    return await update_message(callback.message, mess.text, add_keyboard(DICT))
 
 
 @router.callback_query(CallSex.filter(F.action == "ask_sex"))
@@ -58,7 +58,6 @@ async def register_2_ask_profession(
             ).pack(),
         }
     return await update_message(callback.message, mess.text, add_keyboard(DICT))
-    # await state.set_state(NewPerson.profession)
 
 
 @router.callback_query(CallProfession.filter(F.action == "ask_profession"))
@@ -88,8 +87,7 @@ async def register_4_ask_destination(callback: CallbackQuery, callback_data: Cal
     DICT = {
             destination.text: 'register_destination'
             }
-    await update_message(callback.message, mess.text, add_keyboard(DICT))
-    #await state.set_state(NewPerson.destination)
+    return await update_message(callback.message, mess.text, add_keyboard(DICT))
 
 
 @router.callback_query(F.data == "register_destination")
@@ -97,11 +95,14 @@ async def register_5_ask_dice(callback: CallbackQuery, state: FSMContext):
     user_data = await state.get_data()
     mess = await MessText.get(f"register_dice_{user_data['profession']}")
     DICT = {"Отдать письмо": "register_dice"}
-    await update_message(callback.message, mess.text, add_keyboard(DICT))
+    return await update_message(callback.message, mess.text, add_keyboard(DICT))
 
 
 @router.callback_query(F.data == "register_dice")
 async def register_6_end(callback: CallbackQuery, state: FSMContext, bot:Bot):
+    if callback.message is not None:
+        await delete_message(callback.message)
+
     msg = await bot.send_dice(callback.from_user.id, emoji=DiceEmoji.DICE)
     if msg.dice is not None:
         value = msg.dice.value
@@ -109,6 +110,7 @@ async def register_6_end(callback: CallbackQuery, state: FSMContext, bot:Bot):
         value = 1
     await state.update_data(dice=value)
     await asyncio.sleep(4)
+    # await bot.delete_message(msg.chat.id, msg.message_id)
     user_data = await state.get_data()
 
     mess_name = {

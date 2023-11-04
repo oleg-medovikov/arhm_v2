@@ -26,7 +26,7 @@ async def start_new_game(callback: CallbackQuery, callback_data: CallUser):
     if person is None:
         mess = await MessText.get("hello_no_person")
         DICT = {
-            "регистрация у шерифа": "register",
+            "регистрация у шерифа": CallUser(action="register", user_id=user_id).pack(),
         }
         return await update_message(callback.message, mess.text, add_keyboard(DICT))
 

@@ -6,7 +6,7 @@ from aiogram.types import Message, InlineKeyboardMarkup
 
 async def update_message(
     message: Optional[Message], MESS, keyboard: Optional[InlineKeyboardMarkup]
-) -> "Message":
+) -> Optional["Message"]:
     "изменение сообщения с обработкой исключений"
     if message is None:
         return
