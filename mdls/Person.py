@@ -12,19 +12,20 @@ class Person(db.Model):
     i_id = db.Column(db.Integer(), db.ForeignKey("inventory.id"))
 
     gamename = db.Column(db.String(length=50))
-    create_date = db.Column(db.DateTime(), default=datetime.now())
     sex = db.Column(db.Boolean)
     profession = db.Column(db.String(length=20))
-    destination = db.Column(db.String(length=256))
+    create_date = db.Column(db.DateTime(), default=datetime.now())
 
-    gametime = db.Column(db.SmallInteger())
-    stage = db.Column(db.SmallInteger())
-    money = db.Column(db.SmallInteger())
-    experience = db.Column(db.SmallInteger())
-    proof = db.Column(db.SmallInteger())
-    bless = db.Column(db.SmallInteger())
-    death = db.Column(db.Boolean)
+    gametime = db.Column(db.SmallInteger(), default=1)
+    stage = db.Column(db.SmallInteger(), default=1)
+    experience = db.Column(db.SmallInteger(), default=0)
+    death = db.Column(db.Boolean, default=False)
     death_reason = db.Column(db.String(length=256), nullable=True)
+    death_date = db.Column(db.DateTime(), nullable=True)
+
+    money = db.Column(db.SmallInteger())
+    proof = db.Column(db.SmallInteger(), default=0)
+    bless = db.Column(db.SmallInteger(), default=0)
 
     max_health = db.Column(db.SmallInteger())
     health = db.Column(db.SmallInteger())
@@ -38,8 +39,8 @@ class Person(db.Model):
     godliness = db.Column(db.SmallInteger())
     luck = db.Column(db.SmallInteger())
 
-    hunger = db.Column(db.SmallInteger())
-    weary = db.Column(db.SmallInteger())
+    hunger = db.Column(db.SmallInteger(), default=0)
+    weary = db.Column(db.SmallInteger(), default=0)
 
     @property
     def user(self):

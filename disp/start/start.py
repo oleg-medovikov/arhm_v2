@@ -3,6 +3,7 @@ from aiogram.types import Message
 from aiogram.filters import CommandStart
 from aiogram import Bot
 
+
 from func import delete_message, get_chat_fio, add_keyboard, update_sticker
 from mdls import MessText, User
 from call import CallUser

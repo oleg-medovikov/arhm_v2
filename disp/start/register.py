@@ -103,7 +103,7 @@ async def register_6_end(callback: CallbackQuery, state: FSMContext, bot:Bot):
     if callback.message is not None:
         await delete_message(callback.message)
 
-    msg = await bot.send_dice(callback.from_user.id, emoji=DiceEmoji.DICE)
+    msg = await bot.send_dice(callback.from_user.id, emoji=DiceEmoji.DICE, protect_content=True)
     if msg.dice is not None:
         value = msg.dice.value
     else:

@@ -16,7 +16,9 @@ async def update_sticker(chat_id: int, sticker_name: Optional[str], bot: Bot):
     if sticker_name is not None:
         sticker = await Sticker.query.where(Sticker.name == sticker_name).gino.first()
         if sticker is not None:
-            MESS = await bot.send_sticker(chat_id, sticker=sticker.send_id)
+            MESS = await bot.send_sticker(
+                chat_id, sticker=sticker.send_id, protect_content=True
+            )
             if log is not None:
                 await log.update(message_id=MESS.message_id).apply()
             else:
