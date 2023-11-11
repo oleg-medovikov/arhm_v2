@@ -23,9 +23,13 @@ async def update_message(
             await message.delete()
         except TelegramBadRequest:
             pass
-        await message.answer(MESS, reply_markup=keyboard, parse_mode="Markdown")
+        message = await message.answer(
+            MESS, reply_markup=keyboard, parse_mode="Markdown"
+        )
     except TelegramNotFound:
-        await message.answer(MESS, reply_markup=keyboard, parse_mode="Markdown")
+        message = await message.answer(
+            MESS, reply_markup=keyboard, parse_mode="Markdown"
+        )
 
     if keyboard is not None:
         try:

@@ -110,9 +110,12 @@ async def register_6_end(callback: CallbackQuery, state: FSMContext, bot:Bot):
         mess = mess.text + f'\n{value}\ufe0f\u20e3'
     else:
         mess = f'\n{value}\ufe0f\u20e3'
-    await update_message(callback.message, mess, None)
-    await asyncio.sleep(5)
+    message = await update_message(callback.message, mess, None)
     # даем пользователю прочитать и меняем сообщение
+    await asyncio.sleep(5)
+    #if callback.message is not None:
+    #    await delete_message(callback.message)
+
     user_data = await state.get_data()
     mess_name = {
             1: f'register_dice_{user_data["profession"]}_1-2',    
@@ -125,4 +128,4 @@ async def register_6_end(callback: CallbackQuery, state: FSMContext, bot:Bot):
 
     await update_sticker(callback.from_user.id, 'шериф', bot)
     mess = await MessText.get(mess_name)
-    await update_message(callback.message, mess.text, None)
+    await update_message(message, mess.text, None)
