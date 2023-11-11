@@ -27,9 +27,9 @@ class Person(db.Model):
     proof = db.Column(db.SmallInteger(), default=0)
     bless = db.Column(db.SmallInteger(), default=0)
 
-    max_health = db.Column(db.SmallInteger())
+    health_max = db.Column(db.SmallInteger())
     health = db.Column(db.SmallInteger())
-    max_mind = db.Column(db.SmallInteger())
+    mind_max = db.Column(db.SmallInteger())
     mind = db.Column(db.SmallInteger())
 
     speed = db.Column(db.SmallInteger())

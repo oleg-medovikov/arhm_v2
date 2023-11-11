@@ -5,6 +5,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from aiogram import F, Bot
 from aiogram.enums.dice_emoji import DiceEmoji
+from random import randint
 
 from func import update_message, add_keyboard, update_sticker
 from func.system.delete_message import delete_message
@@ -100,19 +101,19 @@ async def register_5_ask_dice(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data == "register_dice")
 async def register_6_end(callback: CallbackQuery, state: FSMContext, bot:Bot):
-    if callback.message is not None:
-        await delete_message(callback.message)
-
-    msg = await bot.send_dice(callback.from_user.id, emoji=DiceEmoji.DICE, protect_content=True)
-    if msg.dice is not None:
-        value = msg.dice.value
-    else:
-        value = 1
+    # кидаем кубик на статы и вытаскиваем на время ктулху
+    value = randint(1,6)
     await state.update_data(dice=value)
-    await asyncio.sleep(4)
-    # await bot.delete_message(msg.chat.id, msg.message_id)
+    await update_sticker(callback.from_user.id, 'ктулху', bot)
+    mess = await MessText.get('cthulhu_dice')
+    if mess is not None:
+        mess = mess.text + f'\n{value}\ufe0f\u20e3'
+    else:
+        mess = f'\n{value}\ufe0f\u20e3'
+    await update_message(callback.message, mess, None)
+    await asyncio.sleep(5)
+    # даем пользователю прочитать и меняем сообщение
     user_data = await state.get_data()
-
     mess_name = {
             1: f'register_dice_{user_data["profession"]}_1-2',    
             2: f'register_dice_{user_data["profession"]}_1-2',    
@@ -122,5 +123,6 @@ async def register_6_end(callback: CallbackQuery, state: FSMContext, bot:Bot):
             6: f'register_dice_{user_data["profession"]}_5-6',    
             }[value]
 
+    await update_sticker(callback.from_user.id, 'шериф', bot)
     mess = await MessText.get(mess_name)
     await update_message(callback.message, mess.text, None)

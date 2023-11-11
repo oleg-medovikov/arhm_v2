@@ -4,7 +4,12 @@ from aiogram.filters import CommandStart
 from aiogram import Bot
 
 
-from func import delete_message, get_chat_fio, add_keyboard, update_sticker
+from func import (
+    get_chat_fio,
+    add_keyboard,
+    update_sticker,
+    update_message,
+)
 from mdls import MessText, User
 from call import CallUser
 
@@ -15,7 +20,6 @@ async def command_start_handler(message: Message, bot: Bot):
     начало, тут нужно записать юзера, если он еще не записан
     ну и показать дисклеймер
     """
-    await delete_message(message)
 
     user = await User.query.where(User.tg_id == message.chat.id).gino.first()
     if user is None:
@@ -29,5 +33,4 @@ async def command_start_handler(message: Message, bot: Bot):
     }
 
     await update_sticker(message.chat.id, "ктулху", bot)
-
-    return await message.answer(mess.text, reply_markup=add_keyboard(DICT))
+    return await update_message(message, mess.text, add_keyboard(DICT))

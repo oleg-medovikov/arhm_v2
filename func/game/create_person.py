@@ -16,6 +16,8 @@ async def create_person(user_data: dict) -> "Person":
         rings=[],
         bag=default.start_items,
     )
+    health = _get_value(default.health_min, default.health_max, dice)
+    mind = _get_value(default.mind_min, default.mind_max, dice)
 
     person = await Person.create(
         u_id=user_data.get("user_id"),
@@ -27,6 +29,16 @@ async def create_person(user_data: dict) -> "Person":
         gametime=1,
         stage=1,
         money=_get_value(default.money_min, default.money_max, dice),
+        health_max=health,
+        health=health,
+        mind_max=mind,
+        mind=mind,
+        speed=_get_value(default.speed_min, default.speed_max, dice),
+        stealth=_get_value(default.stealth_min, default.stealth_max, dice),
+        strength=_get_value(default.strength_min, default.strength_max, dice),
+        knowledge=_get_value(default.knowledge_min, default.knowledge_max, dice),
+        godliness=_get_value(default.godliness_min, default.godliness_max, dice),
+        luck=_get_value(default.luck_min, default.luck_max, dice),
     )
 
     return person
