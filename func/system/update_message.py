@@ -14,15 +14,6 @@ async def update_message(
     try:
         await message.delete()
     except TelegramBadRequest:
-        pass
-
-    try:
-        await message.edit_text(MESS, parse_mode="Markdown")
-    except TelegramBadRequest:
-        try:
-            await message.delete()
-        except TelegramBadRequest:
-            pass
         message = await message.answer(
             MESS, reply_markup=keyboard, parse_mode="Markdown"
         )
@@ -30,13 +21,9 @@ async def update_message(
         message = await message.answer(
             MESS, reply_markup=keyboard, parse_mode="Markdown"
         )
-
-    if keyboard is not None:
-        try:
-            await message.edit_reply_markup(reply_markup=keyboard)
-        except TelegramNotFound:
-            pass
-        except TelegramBadRequest:
-            pass
+    else:
+        message = await message.answer(
+            MESS, reply_markup=keyboard, parse_mode="Markdown"
+        )
 
     return message
