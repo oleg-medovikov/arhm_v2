@@ -24,6 +24,7 @@ from .excel.get_sticker_name import (
     update_sticker,
 )
 
+from .admin.person_kill import person_kill
 
 __all__ = [
     # start
@@ -48,4 +49,6 @@ __all__ = [
     "ask_sticker_name",
     "ask_sticker_category",
     "update_sticker",
+    # admin
+    "person_kill",
 ]

@@ -6,7 +6,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from conf import settings
 from base import db
 from func import set_default_commands
-from disp import start, excel, prep
+from disp import start, excel, prep, admin
 
 
 logging.basicConfig(level=logging.INFO)
@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 async def on_startup():
     bot = Bot(token=settings.BOT_API)
     dp = Dispatcher(storage=MemoryStorage())
-    dp.include_routers(start.router, excel.router, prep.router)
+    dp.include_routers(start.router, prep.router, excel.router, admin.router)
 
     await db.set_bind(settings.PSQL)
     await db.gino.create_all()

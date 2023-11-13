@@ -8,6 +8,8 @@ from .StickerLog import StickerLog
 from .Item import Item
 from .Person import Person
 from .PersonName import PersonName
+from .PersonNote import PersonNote
+from .NoteText import NoteText
 
 __all__ = [
     "User",
@@ -20,4 +22,6 @@ __all__ = [
     "Item",
     "Person",
     "PersonName",
+    "PersonNote",
+    "NoteText",
 ]
