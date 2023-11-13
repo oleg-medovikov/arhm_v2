@@ -7,3 +7,4 @@ class StickerLog(db.Model):
 
     chat_id = db.Column(db.BigInteger(), primary_key=True)
     message_id = db.Column(db.BigInteger())
+    name = db.Column(db.String())

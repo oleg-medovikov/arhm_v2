@@ -11,6 +11,7 @@ from .start.register import (
 from .start.continue_game import continue_game
 
 from .prep.prep_main import prep_main
+from .prep.read_notes import read_notes
 
 from .excel.get_files_help import get_files_help
 from .excel.get_files import get_files
@@ -39,6 +40,7 @@ __all__ = [
     "continue_game",
     # prep
     "prep_main",
+    "read_notes",
     # excel
     "get_files_help",
     "get_files",

@@ -8,6 +8,10 @@ from mdls import Sticker, StickerLog
 async def update_sticker(chat_id: int, sticker_name: Optional[str], bot: Bot):
     log = await StickerLog.get(chat_id)
     if log is not None:
+        if log.name == sticker_name:
+            # если стикер в замене не нуждается, то выходим
+            return
+        # иначе удалем текущий стикер
         try:
             await bot.delete_message(chat_id, log.message_id)
         except TelegramBadRequest:
@@ -22,4 +26,6 @@ async def update_sticker(chat_id: int, sticker_name: Optional[str], bot: Bot):
             if log is not None:
                 await log.update(message_id=MESS.message_id).apply()
             else:
-                await StickerLog.create(chat_id=chat_id, message_id=MESS.message_id)
+                await StickerLog.create(
+                    chat_id=chat_id, message_id=MESS.message_id, name=sticker_name
+                )
