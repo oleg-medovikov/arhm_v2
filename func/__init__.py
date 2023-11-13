@@ -6,6 +6,9 @@ from .system.add_keyboard import add_keyboard
 from .system.update_message import update_message
 from .system.update_sticker import update_sticker
 
+from .game.person_create import person_create
+from .game.person_status_card import person_status_card
+
 from .get_excel.get_all_MessText import get_all_MessText
 from .get_excel.get_all_Location import get_all_Location
 from .get_excel.get_all_PersonDefault import get_all_PersonDefault
@@ -28,6 +31,9 @@ __all__ = [
     "add_keyboard",
     "update_message",
     "update_sticker",
+    # game
+    "person_create",
+    "person_status_card",
     # get_excel
     "get_all_MessText",
     "get_all_Location",

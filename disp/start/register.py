@@ -4,13 +4,11 @@ from aiogram.types import CallbackQuery
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from aiogram import F, Bot
-from aiogram.enums.dice_emoji import DiceEmoji
 from random import randint
 
-from func import update_message, add_keyboard, update_sticker
-from func.system.delete_message import delete_message
+from func import update_message, add_keyboard, update_sticker, person_create
 from mdls import MessText, PersonName
-from call import CallUser, CallSex, CallProfession, CallGamename
+from call import CallUser, CallSex, CallProfession, CallGamename, CallPerson
 
 
 class NewPerson(StatesGroup):
@@ -112,11 +110,11 @@ async def register_6_end(callback: CallbackQuery, state: FSMContext, bot:Bot):
         mess = f'\n{value}\ufe0f\u20e3'
     message = await update_message(callback.message, mess, None)
     # даем пользователю прочитать и меняем сообщение
-    await asyncio.sleep(5)
-    #if callback.message is not None:
-    #    await delete_message(callback.message)
-
+    # тут же создаем нового персонажа
     user_data = await state.get_data()
+    person = await person_create(user_data)
+    await asyncio.sleep(5)
+
     mess_name = {
             1: f'register_dice_{user_data["profession"]}_1-2',    
             2: f'register_dice_{user_data["profession"]}_1-2',    
@@ -125,7 +123,10 @@ async def register_6_end(callback: CallbackQuery, state: FSMContext, bot:Bot):
             5: f'register_dice_{user_data["profession"]}_5-6',    
             6: f'register_dice_{user_data["profession"]}_5-6',    
             }[value]
+    DICT = {
+        'уйти из полицейского участка': CallPerson(action='continue_game', person_id=person.id).pack()
+            }
 
     await update_sticker(callback.from_user.id, 'шериф', bot)
     mess = await MessText.get(mess_name)
-    await update_message(message, mess.text, None)
+    return await update_message(message, mess.text, add_keyboard(DICT))

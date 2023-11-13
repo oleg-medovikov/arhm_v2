@@ -5,7 +5,7 @@ def _get_value(MIN: int, MAX: int, DICE: int) -> int:
     return MIN + int(DICE * (MAX - MIN) / 6)
 
 
-async def create_person(user_data: dict) -> "Person":
+async def person_create(user_data: dict) -> "Person":
     """"""
     dice = user_data.get("dice", 1)
     # достаем значения по умолчанию
@@ -26,8 +26,6 @@ async def create_person(user_data: dict) -> "Person":
         gamename=user_data.get("gamename"),
         sex=user_data.get("sex"),
         profession=user_data.get("profession"),
-        gametime=1,
-        stage=1,
         money=_get_value(default.money_min, default.money_max, dice),
         health_max=health,
         health=health,

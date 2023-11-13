@@ -6,7 +6,7 @@ from sqlalchemy import and_, false
 from func import add_keyboard, update_message
 
 from mdls import Person, MessText
-from call import CallUser
+from call import CallUser, CallPerson
 
 
 @router.callback_query(CallUser.filter(F.action == "start_new_game"))
@@ -32,6 +32,8 @@ async def start_new_game(callback: CallbackQuery, callback_data: CallUser):
 
     mess = await MessText.get("hello_exist_person")
     DICT = {
-        "продолжить приключение": "continue_game",
+        "продолжить игру": CallPerson(
+            action="continue_game", person_id=person.id
+        ).pack(),
     }
     return await update_message(callback.message, mess.text, add_keyboard(DICT))
