@@ -10,6 +10,7 @@ from .start.register import (
 )
 from .start.continue_game import continue_game
 
+from .prep.prep_main import prep_main
 
 from .excel.get_files_help import get_files_help
 from .excel.get_files import get_files
@@ -35,6 +36,8 @@ __all__ = [
     "register_5_ask_dice",
     "register_6_end",
     "continue_game",
+    # prep
+    "prep_main",
     # excel
     "get_files_help",
     "get_files",

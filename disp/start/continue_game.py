@@ -14,7 +14,7 @@ async def continue_game(callback: CallbackQuery, callback_data: CallPerson, bot:
 
     mess = person_status_card(person)
 
-    DICT = {"test": "test"}
+    DICT = {"Подготовка": CallPerson(action="prep_main", person_id=person.id).pack()}
 
     await update_sticker(callback.from_user.id, None, bot)
     return await update_message(callback.message, mess, add_keyboard(DICT))
