@@ -5,6 +5,7 @@ from .CallProfession import CallProfession
 from .CallGamename import CallGamename
 from .CallPerson import CallPerson
 from .CallNotes import CallNotes
+from .CallInventory import CallInventory
 
 __all__ = [
     "CallSticker",
@@ -14,4 +15,5 @@ __all__ = [
     "CallProfession",
     "CallGamename",
     "CallNotes",
+    "CallInventory",
 ]

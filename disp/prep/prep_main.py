@@ -4,23 +4,36 @@ from aiogram import F, Bot
 
 
 from func import update_message, add_keyboard, update_sticker
-from mdls import Person, MessText
-from call import CallPerson, CallNotes
+from mdls import MessText
+from call import CallPerson, CallNotes, CallInventory
 
 
 @router.callback_query(CallPerson.filter(F.action == "prep_main"))
 async def prep_main(callback: CallbackQuery, callback_data: CallPerson, bot: Bot):
-    person = await Person.get(callback_data.person_id)
-
-    mess = await MessText.get(f"prep_main_{person.profession}")
+    mess = await MessText.get(f"prep_main_{callback_data.profession}")
     await update_sticker(callback.from_user.id, "студентка", bot)
 
     DICT = {
         "записи в дневнике": CallNotes(
-            action="read_notes", person_id=person.id, gametime=-1
+            action="read_notes",
+            person_id=callback_data.person_id,
+            profession=callback_data.profession,
+            i_id=callback_data.i_id,
+            gametime=-1,
         ).pack(),
-        # "инвентарь": "test",
+        "инвентарь": CallInventory(
+            action="inventory_main",
+            profession=callback_data.profession,
+            person_id=callback_data.person_id,
+            i_id=callback_data.i_id,
+            item=0,
+        ).pack(),
         # "карта": "map",
-        "назад": CallPerson(action="continue_game", person_id=person.id).pack(),
+        "назад": CallPerson(
+            action="continue_game",
+            person_id=callback_data.person_id,
+            profession=callback_data.profession,
+            i_id=callback_data.i_id,
+        ).pack(),
     }
     await update_message(callback.message, mess.text, add_keyboard(DICT))

@@ -8,7 +8,7 @@ from mdls import Sticker, StickerLog
 async def update_sticker(chat_id: int, sticker_name: Optional[str], bot: Bot):
     log = await StickerLog.get(chat_id)
     if log is not None:
-        if log.name == sticker_name:
+        if log.name == sticker_name and sticker_name != "ктулху":
             # если стикер в замене не нуждается, то выходим
             return
         # иначе удалем текущий стикер

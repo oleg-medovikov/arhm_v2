@@ -33,7 +33,10 @@ async def start_new_game(callback: CallbackQuery, callback_data: CallUser):
     mess = await MessText.get("hello_exist_person")
     DICT = {
         "продолжить игру": CallPerson(
-            action="continue_game", person_id=person.id
+            action="continue_game",
+            person_id=person.id,
+            profession=person.profession,
+            i_id=person.i_id,
         ).pack(),
     }
     return await update_message(callback.message, mess.text, add_keyboard(DICT))

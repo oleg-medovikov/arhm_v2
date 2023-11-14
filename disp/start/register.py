@@ -129,7 +129,12 @@ async def register_6_end(callback: CallbackQuery, state: FSMContext, bot:Bot):
             6: f'register_dice_{user_data["profession"]}_5-6',    
             }[value]
     DICT = {
-        'уйти из полицейского участка': CallPerson(action='continue_game', person_id=person.id).pack()
+        'уйти из полицейского участка': CallPerson(
+                action='continue_game',
+                person_id=person.id,
+                profession=person.profession,
+                i_id=person.i_id
+            ).pack()
             }
 
     await update_sticker(callback.from_user.id, 'шериф', bot)
