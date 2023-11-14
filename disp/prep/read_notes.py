@@ -3,7 +3,7 @@ from aiogram.types import CallbackQuery
 from aiogram import F, Bot
 
 
-from func import update_message, add_keyboard
+from func import update_message, add_keyboard, person_note_read
 from mdls import PersonNote, NoteText
 from call import CallPerson, CallNotes
 
@@ -35,7 +35,7 @@ async def read_notes(callback: CallbackQuery, callback_data: CallNotes, bot: Bot
             }
 
         else:
-            mess = note.note_text.text
+            mess = person_note_read(note)
             DICT = {
                 "<<  ": CallNotes(
                     action="read_notes",
@@ -64,4 +64,4 @@ async def read_notes(callback: CallbackQuery, callback_data: CallNotes, bot: Bot
             ).pack(),
         }
 
-    await update_message(callback.message, mess, add_keyboard(DICT, True))
+    await update_message(callback.message, mess, add_keyboard(DICT, True), True)

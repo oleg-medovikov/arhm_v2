@@ -39,6 +39,9 @@ async def read_Item(user: User) -> str:
 
         row['single_use'] = bool(row['single_use'])
         row['achievement'] = bool(row['achievement'])
+        
+        for key in ['description', 'mess_equip', 'mess_fail', 'mess_remove', 'mess_drop']:
+            row[key] =row[key].replace('\u2028','\n')
 
         # если есть идентичная строчка пропускаем
         item = await Item.query.where(

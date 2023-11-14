@@ -3,7 +3,7 @@ from sqlalchemy import and_
 from mdls import Person, PersonNote, NoteText
 
 
-async def add_person_note(person: "Person", text: str):
+async def person_note_add(person: "Person", text: str):
     # нужно посмотреть есть ли NoteText с таким text
 
     note_text = await NoteText.query.where(NoteText.text == text).gino.first()

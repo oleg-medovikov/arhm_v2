@@ -8,7 +8,8 @@ from .system.update_sticker import update_sticker
 
 from .game.person_create import person_create
 from .game.person_status_card import person_status_card
-from .game.add_person_note import add_person_note
+from .game.person_note_add import person_note_add
+from .game.person_note_read import person_note_read
 
 from .get_excel.get_all_MessText import get_all_MessText
 from .get_excel.get_all_Location import get_all_Location
@@ -35,7 +36,8 @@ __all__ = [
     # game
     "person_create",
     "person_status_card",
-    "add_person_note",
+    "person_note_add",
+    "person_note_read",
     # get_excel
     "get_all_MessText",
     "get_all_Location",

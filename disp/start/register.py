@@ -6,7 +6,7 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram import F, Bot
 from random import randint
 
-from func import update_message, add_keyboard, update_sticker, person_create, add_person_note
+from func import update_message, add_keyboard, update_sticker, person_create, person_note_add
 from mdls import MessText, PersonName
 from call import CallUser, CallSex, CallProfession, CallGamename, CallPerson
 
@@ -116,7 +116,7 @@ async def register_6_end(callback: CallbackQuery, state: FSMContext, bot:Bot):
     # добавляем первую запись в дневник
     note = await MessText.get(f'start_quest_{user_data["profession"]}')
     if note is not None:
-        await add_person_note(person, note.text)
+        await person_note_add(person, note.text)
 
     await asyncio.sleep(5)
 
