@@ -20,10 +20,9 @@ async def inventory_main(
 
     DICT = {}
     # список кнопок с предметами
-    action = "inventory_equip_item" if callback_data.equip else "inventory_bag_item"
     for key, value in items.items():
         DICT[value] = CallInventory(
-            action=action,
+            action="inventory_show_item",
             profession=callback_data.profession,
             person_id=callback_data.person_id,
             i_id=callback_data.i_id,

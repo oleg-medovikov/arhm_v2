@@ -13,6 +13,7 @@ from .start.continue_game import continue_game
 from .prep.prep_main import prep_main
 from .prep.read_notes import read_notes
 from .prep.inventory_main import inventory_main
+from .prep.inventory_show_item import inventory_show_item
 
 from .excel.get_files_help import get_files_help
 from .excel.get_files import get_files
@@ -43,6 +44,7 @@ __all__ = [
     "prep_main",
     "read_notes",
     "inventory_main",
+    "inventory_show_item",
     # excel
     "get_files_help",
     "get_files",
