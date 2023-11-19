@@ -20,6 +20,7 @@ class Item(db.Model):
     effect = db.Column(db.JSON(), nullable=True)
     demand = db.Column(db.JSON(), nullable=True)
     cost = db.Column(db.SmallInteger(), nullable=True)
+    alternative = db.Column(db.SmallInteger(), nullable=True)
     single_use = db.Column(db.Boolean())
     achievement = db.Column(db.Boolean())
 
