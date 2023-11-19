@@ -46,7 +46,7 @@ async def inventory_show(i_id: int, EQUIP: bool = False) -> tuple[str, dict]:
         numbers = inventory.bag
     DICT = {}
     for _ in numbers:
-        DICT[_] = ITEM_DICT[_].name
+        DICT[_] = " " + emoji(ITEM_DICT[_].emoji) + " " + ITEM_DICT[_].name
     # формируем сообщение
     LIST = (
         "*Ваш инвентарь* \n",
