@@ -26,6 +26,7 @@ async def prep_main(callback: CallbackQuery, callback_data: CallPerson, bot: Bot
             profession=callback_data.profession,
             person_id=callback_data.person_id,
             i_id=callback_data.i_id,
+            equip=False,
             item=0,
         ).pack(),
         # "карта": "map",

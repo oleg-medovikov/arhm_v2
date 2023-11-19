@@ -6,4 +6,5 @@ class CallInventory(CallbackData, prefix="t"):
     person_id: int
     profession: str
     i_id: int
+    equip: bool
     item: int

@@ -24,4 +24,14 @@ class Inventory(db.Model):
                 list_.append(value)
             if key in ("hands", "rings", "bag"):
                 list_ += value
-        return list_
+        return [x for x in list_ if x is not None]
+
+    def get_equip(self):
+        "список всех одетых вещей"
+        list_ = []
+        for key, value in self.to_dict().items():
+            if key in ("head", "neck", "earrings", "body", "legs", "shoes"):
+                list_.append(value)
+            if key in ("hands", "rings"):
+                list_ += value
+        return [x for x in list_ if x is not None]
