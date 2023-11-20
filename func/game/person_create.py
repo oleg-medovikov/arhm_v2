@@ -1,4 +1,5 @@
-from mdls import Person, Inventory, PersonDefault
+from mdls import Person, Inventory, PersonDefault, Item
+from func.game.item_using import item_using
 
 
 def _get_value(MIN: int, MAX: int, DICE: int) -> int:
@@ -16,6 +17,7 @@ async def person_create(user_data: dict) -> "Person":
         rings=[],
         bag=default.start_items,
     )
+
     health = _get_value(default.health_min, default.health_max, dice)
     mind = _get_value(default.mind_min, default.mind_max, dice)
 
@@ -38,5 +40,14 @@ async def person_create(user_data: dict) -> "Person":
         godliness=_get_value(default.godliness_min, default.godliness_max, dice),
         luck=_get_value(default.luck_min, default.luck_max, dice),
     )
+
+    # надеваем стартовые предметы
+    for _ in default.start_items:
+        item = await Item.get(_)
+        if item.slot == "bag":
+            continue
+        person = await Person.get(person.id)
+        inventory = await Inventory.get(inventory.id)
+        await item_using(person, inventory, item)
 
     return person
