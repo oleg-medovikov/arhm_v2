@@ -15,8 +15,9 @@ async def read_Item(user: User) -> str:
             "stick_id",
             "description",
             "mess_equip",
-            "mess_fail",
+            "mess_equip_fail",
             "mess_remove",
+            "mess_remove_fail",
             "mess_drop",
             "type_kind",
             "slot",
@@ -41,7 +42,7 @@ async def read_Item(user: User) -> str:
         row['single_use'] = bool(row['single_use'])
         row['achievement'] = bool(row['achievement'])
         
-        for key in ['description', 'mess_equip', 'mess_fail', 'mess_remove', 'mess_drop']:
+        for key in ['description', 'mess_equip', 'mess_equip_fail', 'mess_remove','mess_remove_fail', 'mess_drop']:
             row[key] =row[key].replace('\u2028','\n')
 
         # если есть идентичная строчка пропускаем
@@ -52,8 +53,9 @@ async def read_Item(user: User) -> str:
                 Item.stick_id == row["stick_id"],
                 Item.description == row["description"],
                 Item.mess_equip == row["mess_equip"],
-                Item.mess_fail == row["mess_fail"],
+                Item.mess_equip_fail == row["mess_equip_fail"],
                 Item.mess_remove == row["mess_remove"],
+                Item.mess_remove_fail == row["mess_remove_fail"],
                 Item.mess_drop == row["mess_drop"],
                 Item.type_kind == row["type_kind"],
                 Item.slot == row["slot"],
@@ -78,8 +80,9 @@ async def read_Item(user: User) -> str:
                 stick_id=row["stick_id"],
                 description=row["description"],
                 mess_equip=row["mess_equip"],
-                mess_fail=row["mess_fail"],
+                mess_equip_fail=row["mess_equip_fail"],
                 mess_remove=row["mess_remove"],
+                mess_remove_fail=row["mess_remove_fail"],
                 mess_drop=row["mess_drop"],
                 type_kind=row["type_kind"],
                 slot=row["slot"],
@@ -102,8 +105,9 @@ async def read_Item(user: User) -> str:
             stick_id=row["stick_id"],
             description=row["description"],
             mess_equip=row["mess_equip"],
-            mess_fail=row["mess_fail"],
+            mess_equip_fail=row["mess_equip_fail"],
             mess_remove=row["mess_remove"],
+            mess_remove_fail=row["mess_remove_fail"],
             mess_drop=row["mess_drop"],
             type_kind=row["type_kind"],
             slot=row["slot"],

@@ -23,7 +23,7 @@ async def item_using(
     # нужно проверить требования к персонажу, перед использованием
     if not await demand(person, item.demand):
         # если не прошел проверку, то просто возвращаем сообщение
-        return False, item.mess_fail
+        return False, item.mess_equip_fail
 
     # если премет надевается, нужно проверить наличие слота!
     # если надетый предмет имеет альтернативу
