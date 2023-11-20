@@ -10,6 +10,7 @@ from .game.person_create import person_create
 from .game.person_status_card import person_status_card
 from .game.person_note_add import person_note_add
 from .game.person_note_read import person_note_read
+from .game.person_change import person_change
 from .game.inventory_show import inventory_show
 from .game.demand import demand
 
@@ -40,6 +41,7 @@ __all__ = [
     "person_status_card",
     "person_note_add",
     "person_note_read",
+    "person_change",
     "inventory_show",
     "demand",
     # get_excel
