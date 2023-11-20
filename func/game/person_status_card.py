@@ -17,7 +17,7 @@ def person_status_card(PERS: "Person") -> str:
 
     LIST = (
         f"*Карточка персонажа*\n*ИМЯ:* {PERS.gamename}, {PERS.profession}",
-        f'\n*Зарегистрирован {("" if PERS.sex else "а")}:* {DATE}',
+        f'\n*Зарегистрирован{("" if PERS.sex else "а")}:* {DATE}',
         f"\n*Проведено дней в Археме:* {DAYS}",
         # "\n ``` ",
         f'\n{emoji("clock")}  {TIME}  {emoji("dollar")}  {PERS.money}  {emoji("proof")}  {PERS.proof}',

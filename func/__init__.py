@@ -13,6 +13,7 @@ from .game.person_note_read import person_note_read
 from .game.person_change import person_change
 from .game.inventory_show import inventory_show
 from .game.demand import demand
+from .game.item_using import item_using
 
 from .get_excel.get_all_MessText import get_all_MessText
 from .get_excel.get_all_Location import get_all_Location
@@ -44,6 +45,7 @@ __all__ = [
     "person_change",
     "inventory_show",
     "demand",
+    "item_using",
     # get_excel
     "get_all_MessText",
     "get_all_Location",

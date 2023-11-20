@@ -1,6 +1,6 @@
 from .config import settings
 from .emoji import emoji, emoji_all
-from .game_parameters import MAX_HUNGER, MAX_WEARY, MAX_BAG_CAPASITY
+from .game_parameters import MAX_HUNGER, MAX_WEARY, MAX_BAG_CAPASITY, MAX_RINGS_EQUIP
 
 
 __all__ = [
@@ -10,4 +10,5 @@ __all__ = [
     "MAX_HUNGER",
     "MAX_WEARY",
     "MAX_BAG_CAPASITY",
+    "MAX_RINGS_EQUIP",
 ]

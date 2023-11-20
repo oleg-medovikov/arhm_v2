@@ -25,7 +25,7 @@ async def demand(person: "Person", DEMAND: dict) -> bool:
     for key, value in DEMAND.items():
         CHECK = {
             key in LIST_PERS: _check_pers_str(person, key, value),
-            key == "location": _check_location(person.location, value),
+            key == "location": _check_location(person.loc_id, value),
             key in LIST_STAT: _check_stat(person, key, value),
             key == "time": _time_cheack(person.gametime, value),
             key == "less_money": _less_money(person.money, value),

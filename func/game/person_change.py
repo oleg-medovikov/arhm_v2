@@ -20,7 +20,7 @@ L_ID = ["location"]
 L_BOOL = ["death"]
 
 
-async def person_change(person: "Person", DICT: dict):
+async def person_change(person: "Person", DICT: dict) -> "Person":
     """
     Изменение параметров персонажа
     """
@@ -48,4 +48,5 @@ async def person_change(person: "Person", DICT: dict):
     # применяем изменения в базе
     if len(updates):
         # с путым словарем нельзя
-        await person.update(**updates).apply()
+        person = await person.update(**updates).apply()
+    return person
