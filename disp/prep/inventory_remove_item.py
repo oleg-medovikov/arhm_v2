@@ -28,9 +28,9 @@ async def inventory_remove_item(callback: CallbackQuery, callback_data: CallInve
             profession=callback_data.profession,
             person_id=callback_data.person_id,
             i_id=callback_data.i_id,
-            equip=callback_data.equip,
+            equip=True,
             item=item.id,
-        )
+        ).pack()
         return await update_message(callback.message, mess, add_keyboard(DICT))
 
     # если удалось снять без условий, возвращаемся в просмотр сумки
@@ -40,9 +40,9 @@ async def inventory_remove_item(callback: CallbackQuery, callback_data: CallInve
             profession=callback_data.profession,
             person_id=callback_data.person_id,
             i_id=callback_data.i_id,
-            equip=callback_data.equip,
+            equip=False,
             item=item.id,
-        )
+        ).pack()
         return await update_message(callback.message, mess, add_keyboard(DICT))
 
     # если есть выбор альтернативных предметов - создаем кнопки на using_item
@@ -55,5 +55,5 @@ async def inventory_remove_item(callback: CallbackQuery, callback_data: CallInve
             i_id=callback_data.i_id,
             equip=callback_data.equip,
             item=key,
-        )
+        ).pack()
     return await update_message(callback.message, mess, add_keyboard(dict_))
