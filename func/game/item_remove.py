@@ -3,6 +3,7 @@ from sqlalchemy import and_
 from mdls import Person, Inventory, Item
 from conf import MAX_BAG_CAPASITY
 from func.game.person_change import person_change
+from func.game.demand import demand
 
 
 async def item_remove(
@@ -31,8 +32,14 @@ async def item_remove(
         alter_items = await Item.query.where(
             and_(Item.id.in_(inventory.bag), Item.slot == item.slot)
         ).gino.all()
-        dict_ = {}
+        # необходимо проверить требования
+        _alter_items_ = []
         for _ in alter_items:
+            if await demand(person, _.demand):
+                _alter_items_.append(_)
+        # формируем словарь для кнопочек выбора из подходящих вещей
+        dict_ = {}
+        for _ in _alter_items_:
             dict_[_.id] = _.name
         if len(dict_):
             # тут мы должны снять предмет, а для начала снять эффект
