@@ -16,6 +16,7 @@ from .prep.inventory_main import inventory_main
 from .prep.inventory_show_item import inventory_show_item
 from .prep.inventory_using_item import inventory_using_item
 from .prep.inventory_remove_item import inventory_remove_item
+from .prep.inventory_drop_item import inventory_drop_item, inventory_drop_item_end
 
 from .excel.get_files_help import get_files_help
 from .excel.get_files import get_files
@@ -49,6 +50,8 @@ __all__ = [
     "inventory_show_item",
     "inventory_using_item",
     "inventory_remove_item",
+    "inventory_drop_item",
+    "inventory_drop_item_end",
     # excel
     "get_files_help",
     "get_files",

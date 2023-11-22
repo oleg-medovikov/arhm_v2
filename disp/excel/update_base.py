@@ -23,6 +23,10 @@ async def update_base(message: Message, bot: Bot):
 
     if message.document is None:
         return
+    if " " in str(message.document.file_name):
+        file_name = str(message.document.file_name).split(" ")[0] + ".xlsx"
+    else:
+        file_name = str(message.document.file_name)
 
     FUNC = {
         "MessText.xlsx": read_MessText(user),
@@ -30,13 +34,13 @@ async def update_base(message: Message, bot: Bot):
         "PersonDefault.xlsx": read_PersonDefault(user),
         "Sticker.xlsx": read_Sticker(user),
         "Item.xlsx": read_Item(user),
-    }.get(str(message.document.file_name))
+    }.get(file_name)
 
     if FUNC is None:
         return
 
     file = await bot.get_file(message.document.file_id)
-    await bot.download_file(str(file.file_path), f"/tmp/_{message.document.file_name}")
+    await bot.download_file(str(file.file_path), f"/tmp/_{file_name}")
 
     try:
         mess = await FUNC
