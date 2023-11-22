@@ -15,6 +15,7 @@ from .game.inventory_show import inventory_show
 from .game.demand import demand
 from .game.item_using import item_using
 from .game.item_remove import item_remove
+from .game.item_description import item_description
 
 from .get_excel.get_all_MessText import get_all_MessText
 from .get_excel.get_all_Location import get_all_Location
@@ -48,6 +49,7 @@ __all__ = [
     "demand",
     "item_using",
     "item_remove",
+    "item_description",
     # get_excel
     "get_all_MessText",
     "get_all_Location",

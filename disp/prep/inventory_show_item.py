@@ -3,7 +3,7 @@ from aiogram.types import CallbackQuery
 from aiogram import F, Bot
 
 
-from func import update_message, add_keyboard, update_sticker
+from func import update_message, add_keyboard, update_sticker, item_description
 from call import CallInventory
 from mdls import Item, Sticker
 
@@ -62,4 +62,6 @@ async def inventory_show_item(
         item=0,
     ).pack()
 
-    await update_message(callback.message, item.description, add_keyboard(DICT))
+    return await update_message(
+        callback.message, item_description(item), add_keyboard(DICT)
+    )
