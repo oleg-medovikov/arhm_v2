@@ -40,6 +40,9 @@ Dict_emoji = {
     "stopwatch": "\u23f1",
     "hotdog": "\ud83c\udf2d",
     "8leg": "\ud83d\udc19",
+    "sharf": "\U0001F9E3",
+    "gloves": "\U0001F9E4",
+    "bouquet": "\U0001F490",
 }
 
 

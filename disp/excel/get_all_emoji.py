@@ -19,6 +19,8 @@ async def get_all_emoji(message: Message):
     MESS = ""
     for key in emoji_all():
         word = key + " " * (MAX_LEN - len(key))
-        MESS += f"``` { word }   ```" + emoji(key) + "\n"
+        MESS += f" { word }   " + emoji(key) + "\n"
+
+    MESS = f"` \n{MESS} `"
 
     return await message.answer(MESS, disable_notification=True, parse_mode="Markdown")

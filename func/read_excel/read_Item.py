@@ -33,17 +33,22 @@ async def read_Item(user: User) -> str:
 
     mess = ""
     for row in df.to_dict("records"):
-        # делаем из False false
-        if row['demand'] is not None:
-            row['demand'] = loads(row['demand'].replace("'", '"').lower())
-        if row['effect'] is not None:
-            row['effect'] = loads(row['effect'].replace("'", '"').lower())
+        
+        for key in ['demand', 'effect']:
+            if isinstance(row[key], str):
+                row[key] = loads(row[key].replace("'", '"').lower())
+            else:
+                row[key] = {}
 
+        # делаем из False false
         row['single_use'] = bool(row['single_use'])
         row['achievement'] = bool(row['achievement'])
         
         for key in ['description', 'mess_equip', 'mess_equip_fail', 'mess_remove','mess_remove_fail', 'mess_drop']:
-            row[key] =row[key].replace('\u2028','\n')
+            if isinstance(row[key], str):
+                row[key] = row[key].replace('\u2028','\n')
+            else:
+                row[key] = None
 
         # если есть идентичная строчка пропускаем
         item = await Item.query.where(
