@@ -8,26 +8,32 @@ dict_ = {
     "knowledge": "знания",
     "godliness": "набожность",
     "luck": "удача",
+    "mind_max": "максимум рассудка",
+    "health_max": "максимум здоровья",
+    "positive": "",
+    "negative": "",
 }
 
 
 def item_description(item: "Item") -> str:
     """описание предмета + требования + эффекты"""
-    mess = item.description + "\n\n"
+    mess = item.description
 
     # сначала распишем требования
     if len(item.demand):
-        mess += "* Требования: *"
+        mess += "\n\n * Требования: *"
         for key, value in item.demand.items():
             if key == "sex":
                 mess += "\n - Для мужчин" if value else "\n - Для женщин"
                 continue
             mess += "\n - " + dict_.get(key, key) + "  " + str(value)
-    mess += "\n\n"
     # теперь распишем эффект
-    if len(item.demand):
-        mess += "* Эффект: *"
+    if len(item.effect):
+        mess += "\n\n * Эффект: *"
         for key, value in item.effect.items():
+            if key in ["positive", "negative"]:
+                mess += "\n - " + str(value)
+                continue
             mess += "\n - " + dict_.get(key, key) + "  " + str(value)
 
     return mess
