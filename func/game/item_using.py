@@ -61,14 +61,17 @@ async def item_using(
     if not item.single_use:
         if item.slot in ["head", "neck", "earrings", "body", "legs", "shoes"]:
             dict_ = {item.slot: item.id}
-        if item.slot == "onehand":
-            dict_ = {"hands": inventory.hands.append(item.id)}
-        if item.slot == "twohands":
+        elif item.slot == "onehand":
+            inventory.hands.append(item.id)
+            dict_ = {"hands": inventory.hands}
+        elif item.slot == "twohands":
             dict_ = {"hands": [item.id, item.id]}
-        if item.slot == "rings":
-            dict_ = {"rings": inventory.rings.append(item.id)}
-        if item.slot == "bag":
-            dict_ = {"bag": inventory.bag.append(item.id)}
+        elif item.slot == "rings":
+            inventory.rings.append(item.id)
+            dict_ = {"rings": inventory.rings}
+        elif item.slot == "bag":
+            inventory.bag.append(item.id)
+            dict_ = {"bag": inventory.bag}
 
         await inventory.update(**dict_).apply()
 
