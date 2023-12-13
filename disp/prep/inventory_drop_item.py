@@ -22,19 +22,19 @@ async def inventory_drop_item(callback: CallbackQuery, callback_data: CallInvent
 
     DICT = {
         "подарить нашедшему": CallInventory(
-            action="inventory_drop_item_good",
+            action="inventory_drop_item_end",
             profession=callback_data.profession,
             person_id=callback_data.person_id,
             i_id=callback_data.i_id,
-            equip=callback_data.equip,
+            equip=True,
             item=item.id,
         ).pack(),
         "попросить не трогать": CallInventory(
-            action="inventory_drop_item_bad",
+            action="inventory_drop_item_end",
             profession=callback_data.profession,
             person_id=callback_data.person_id,
             i_id=callback_data.i_id,
-            equip=callback_data.equip,
+            equip=False,
             item=item.id,
         ).pack(),
         "назад": CallInventory(
@@ -49,11 +49,7 @@ async def inventory_drop_item(callback: CallbackQuery, callback_data: CallInvent
     return await update_message(callback.message, item.mess_drop, add_keyboard(DICT))
 
 
-@router.callback_query(
-    CallInventory.filter(
-        F.action in ("inventory_drop_item_good", "inventory_drop_item_bad")
-    )
-)
+@router.callback_query(CallInventory.filter(F.action == "inventory_drop_item_end"))
 async def inventory_drop_item_end(
     callback: CallbackQuery, callback_data: CallInventory
 ):
@@ -64,7 +60,7 @@ async def inventory_drop_item_end(
     inventory.bag.remove(callback_data.item)
     await inventory.update(bag=inventory.bag).apply()
 
-    if callback_data.action == "inventory_drop_item_good":
+    if callback_data.equip:
         mess = await MessText.get(f"item_drop_{callback_data.profession}_good")
     else:
         mess = await MessText.get(f"item_drop_{callback_data.profession}_bad")
@@ -74,7 +70,7 @@ async def inventory_drop_item_end(
         i_id=callback_data.item,
         l_id=person.loc_id,
         p_id=person.id,
-        gift=True if callback_data.action == "inventory_drop_item_good" else False,
+        gift=callback_data.equip,
     )
 
     DICT = {
@@ -83,7 +79,7 @@ async def inventory_drop_item_end(
             profession=callback_data.profession,
             person_id=callback_data.person_id,
             i_id=callback_data.i_id,
-            equip=callback_data.equip,
+            equip=False,
             item=callback_data.item,
         ).pack()
     }
