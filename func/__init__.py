@@ -29,6 +29,7 @@ from .read_excel.read_Location import read_Location
 from .read_excel.read_PersonDefault import read_PersonDefault
 from .read_excel.read_Sticker import read_Sticker
 from .read_excel.read_Item import read_Item
+from .read_excel.read_Dialog import read_Dialog
 
 
 __all__ = [
@@ -64,4 +65,5 @@ __all__ = [
     "read_PersonDefault",
     "read_Sticker",
     "read_Item",
+    "read_Dialog",
 ]

@@ -78,7 +78,6 @@ async def read_Item(user: User) -> str:
             continue
         # если есть строчка с таким же name то делаем update
         item = await Item.query.where(Item.name == row["name"]).gino.first()
-        print(item)
         if item is not None:
             await item.update(
                 name=row["name"],
@@ -104,7 +103,6 @@ async def read_Item(user: User) -> str:
             mess += f"\n Обновил строку {row['name']}"
             continue
         # если нет, то создаем новую строку
-        print('test')
         await Item.create(
             name=row["name"],
             stick_id=row["stick_id"],
