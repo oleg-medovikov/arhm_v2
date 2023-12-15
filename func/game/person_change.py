@@ -14,13 +14,15 @@ L_STANDART = [
     "money",
     "health",
     "mind",
+    "health_max",
+    "mind_min",
 ]
 L_POSITIVE = ["hunger", "weary"]
 L_ID = ["location"]
 L_BOOL = ["death"]
 
 
-async def person_change(person: "Person", DICT: dict) -> "Person":
+async def person_change(person: "Person", DICT: dict, negative=False) -> "Person":
     """
     Изменение параметров персонажа
     """
@@ -30,6 +32,9 @@ async def person_change(person: "Person", DICT: dict) -> "Person":
             old = getattr(person, key)
         except AttributeError:
             continue
+
+        if negative and isinstance(value, int):
+            value = -value
 
         itog = {
             # стандартно складываем значения

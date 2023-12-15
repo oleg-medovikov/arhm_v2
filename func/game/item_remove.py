@@ -43,12 +43,7 @@ async def item_remove(
             dict_[_.id] = _.name
         if len(dict_):
             # тут мы должны снять предмет, а для начала снять эффект
-            effect = {}
-
-            for key, value in item.effect:
-                effect[key] = -value
-
-            person = await person_change(person, effect)
+            person = await person_change(person, item.effect, negative=True)
             # теперь удаляем из слота и кидаем в сумку
             inventory.bag.append(item.id)
             if item.slot in ["head", "neck", "earrings", "body", "legs", "shoes"]:
@@ -69,12 +64,7 @@ async def item_remove(
 
     # тут разбираем предметы, для которых не нужна альтернатива
     # теперь нужно убрать эффекты предмета
-    effect = {}
-
-    for key, value in item.effect:
-        effect[key] = -value
-
-    person = await person_change(person, effect)
+    person = await person_change(person, item.effect, negative=True)
 
     # теперь удаляем из слота и кидаем в сумку
     inventory.bag.append(item.id)
