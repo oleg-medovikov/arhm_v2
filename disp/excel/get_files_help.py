@@ -13,6 +13,7 @@ MESS = """*Доступные команды для редактирования
     /PersonDefault
     /Sticker
     /Item
+    /Dialog
 
     /get_emoji
 

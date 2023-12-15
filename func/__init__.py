@@ -22,6 +22,7 @@ from .get_excel.get_all_Location import get_all_Location
 from .get_excel.get_all_PersonDefault import get_all_PersonDefault
 from .get_excel.get_all_Sticker import get_all_Sticker
 from .get_excel.get_all_Item import get_all_Item
+from .get_excel.get_all_Dialog import get_all_Dialog
 
 from .read_excel.read_MessText import read_MessText
 from .read_excel.read_Location import read_Location
@@ -56,6 +57,7 @@ __all__ = [
     "get_all_PersonDefault",
     "get_all_Sticker",
     "get_all_Item",
+    "get_all_Dialog",
     # read_excel
     "read_MessText",
     "read_Location",

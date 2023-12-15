@@ -12,6 +12,10 @@ from call import CallPerson
 async def continue_game(callback: CallbackQuery, callback_data: CallPerson, bot: Bot):
     person = await Person.get(callback_data.person_id)
 
+    # неплохо тут сделать проверку, живой ли персонаж
+
+    # ===============================================
+
     mess = person_status_card(person)
 
     DICT = {
@@ -20,7 +24,13 @@ async def continue_game(callback: CallbackQuery, callback_data: CallPerson, bot:
             person_id=person.id,
             profession=person.profession,
             i_id=person.i_id,
-        ).pack()
+        ).pack(),
+        "Перемещение": CallPerson(
+            action="relocate_main",
+            person_id=person.id,
+            profession=person.profession,
+            i_id=person.i_id,
+        ).pack(),
     }
 
     await update_message(callback.message, mess, add_keyboard(DICT))

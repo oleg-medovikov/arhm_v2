@@ -20,7 +20,7 @@ L_ID = ["location"]
 L_BOOL = ["death"]
 
 
-async def person_change(person: "Person", DICT: dict, negative=False) -> "Person":
+async def person_change(person: Person, DICT: dict, negative=False) -> "Person":
     """
     Изменение параметров персонажа
     """
@@ -44,6 +44,13 @@ async def person_change(person: "Person", DICT: dict, negative=False) -> "Person
                 key: old + value,
                 key_x: int(round(x1 * (old + value) / old)),
             }
+            person = await person.update(**up).apply()
+            continue
+        # отдельная логика для изменения здоровья и рассудка
+        # они не могут быть больше максимума
+        if key in ["health", "mind"]:
+            x_max = getattr(person, key + "_max")
+            up = {key: old + value if old + value <= x_max else x_max}
             person = await person.update(**up).apply()
             continue
 
