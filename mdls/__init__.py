@@ -12,6 +12,8 @@ from .PersonName import PersonName
 from .PersonNote import PersonNote
 from .NoteText import NoteText
 from .Dialog import Dialog
+from .Action import Action
+from .Event import Event
 
 __all__ = [
     "User",
@@ -28,4 +30,6 @@ __all__ = [
     "PersonNote",
     "NoteText",
     "Dialog",
+    "Action",
+    "Event",
 ]
