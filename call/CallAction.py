@@ -5,3 +5,4 @@ class CallAction(CallbackData, prefix="t"):
     action: str
     person_id: int
     profession: str
+    loc_id: int

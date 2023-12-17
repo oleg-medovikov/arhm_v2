@@ -1,4 +1,3 @@
-from os import name
 from disp.action import router
 from aiogram.types import CallbackQuery
 from aiogram import F, Bot
@@ -22,7 +21,7 @@ async def action_main(callback: CallbackQuery, callback_data: CallAction, bot: B
         await LocDescription.load(location=Location, sticker=Sticker)
         .query.where(
             and_(
-                LocDescription.loc_id == callback_data.person_id,
+                LocDescription.loc_id == callback_data.loc_id,
                 LocDescription.profession == callback_data.profession,
             )
         )
@@ -30,7 +29,7 @@ async def action_main(callback: CallbackQuery, callback_data: CallAction, bot: B
     )
     await update_sticker(callback.from_user.id, locd.sticker.name, bot)
     # теперь описание локации
-    mess = f"*Локация: {locd.location.name}* \n\n"
+    mess = f"*Локация: {locd.location.name}* \n\n{locd.description}"
     DICT = {}
 
     DICT["назад"] = CallPerson(
