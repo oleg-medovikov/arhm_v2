@@ -8,7 +8,7 @@ class LocDescription(db.Model):
 
     id = db.Column(db.SmallInteger, primary_key=True)
     loc_id = db.Column(db.SmallInteger, db.ForeignKey("location.id"))
-    person = db.Column(db.String)
+    profession = db.Column(db.String)
     stage = db.Column(db.SmallInteger)
     description = db.Column(db.String)
     stick_id = db.Column(db.SmallInteger(), db.ForeignKey("sticker.id"), nullable=True)

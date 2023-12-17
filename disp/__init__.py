@@ -10,6 +10,8 @@ from .start.register import (
 )
 from .start.continue_game import continue_game
 
+from .action.action_main import action_main
+
 from .prep.prep_main import prep_main
 from .prep.read_notes import read_notes
 from .prep.inventory_main import inventory_main
@@ -43,6 +45,8 @@ __all__ = [
     "register_5_ask_dice",
     "register_6_end",
     "continue_game",
+    # action
+    "action_main",
     # prep
     "prep_main",
     "read_notes",

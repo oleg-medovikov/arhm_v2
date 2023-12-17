@@ -89,5 +89,4 @@ async def read_notes(callback: CallbackQuery, callback_data: CallNotes):
                 i_id=callback_data.i_id,
             ).pack(),
         }
-    print(mess)
     await update_message(callback.message, mess, add_keyboard(DICT, True), True)
