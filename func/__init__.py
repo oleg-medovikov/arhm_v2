@@ -35,6 +35,8 @@ from .read_excel.read_Item import read_Item
 from .read_excel.read_Dialog import read_Dialog
 from .read_excel.read_Action import read_Action
 from .read_excel.read_Event import read_Event
+from .read_excel.read_LocDescription import read_LocDescription
+
 
 __all__ = [
     # system
@@ -75,4 +77,5 @@ __all__ = [
     "read_Dialog",
     "read_Action",
     "read_Event",
+    "read_LocDescription",
 ]
