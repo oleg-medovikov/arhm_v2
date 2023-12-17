@@ -5,7 +5,7 @@ from aiogram import F, Bot
 
 from func import update_message, add_keyboard, update_sticker, person_status_card
 from mdls import Person
-from call import CallPerson
+from call import CallPerson, CallInventory
 
 
 @router.callback_query(CallPerson.filter(F.action == "continue_game"))
@@ -19,17 +19,19 @@ async def continue_game(callback: CallbackQuery, callback_data: CallPerson, bot:
     mess = person_status_card(person)
 
     DICT = {
-        "Подготовка": CallPerson(
+        "Дневник": CallPerson(
             action="prep_main",
             person_id=person.id,
             profession=person.profession,
             i_id=person.i_id,
         ).pack(),
-        "Перемещение": CallPerson(
-            action="relocate_main",
-            person_id=person.id,
+        "Сумка": CallInventory(
+            action="inventory_main",
             profession=person.profession,
+            person_id=person.id,
             i_id=person.i_id,
+            equip=False,
+            item=0,
         ).pack(),
     }
 

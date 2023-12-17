@@ -52,7 +52,7 @@ async def inventory_main(
         ).pack()
         # кнопка возврата в prep_main
         DICT["назад"] = CallPerson(
-            action="prep_main",
+            action="continue_game",
             person_id=callback_data.person_id,
             profession=callback_data.profession,
             i_id=callback_data.i_id,

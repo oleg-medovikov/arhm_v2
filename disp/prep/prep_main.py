@@ -5,7 +5,7 @@ from aiogram import F, Bot
 
 from func import update_message, add_keyboard, update_sticker
 from mdls import MessText
-from call import CallPerson, CallNotes, CallInventory
+from call import CallPerson, CallNotes
 
 
 @router.callback_query(CallPerson.filter(F.action == "prep_main"))
@@ -20,14 +20,6 @@ async def prep_main(callback: CallbackQuery, callback_data: CallPerson, bot: Bot
             profession=callback_data.profession,
             i_id=callback_data.i_id,
             gametime=-1,
-        ).pack(),
-        "инвентарь": CallInventory(
-            action="inventory_main",
-            profession=callback_data.profession,
-            person_id=callback_data.person_id,
-            i_id=callback_data.i_id,
-            equip=False,
-            item=0,
         ).pack(),
         # "карта": "map",
         "назад": CallPerson(
