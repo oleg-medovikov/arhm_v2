@@ -14,6 +14,9 @@ MESS = """*Доступные команды для редактирования
     /Sticker
     /Item
     /Dialog
+    /Action
+    /Event
+    /LocDescription
 
     /get_emoji
 

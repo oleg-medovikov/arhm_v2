@@ -1,7 +1,7 @@
 from pandas import DataFrame
 
 from base import db
-from mdls import User, Action
+from mdls import User, Action, Location
 
 
 async def get_all_Action() -> "DataFrame":
@@ -10,6 +10,8 @@ async def get_all_Action() -> "DataFrame":
             [
                 Action.id,
                 Action.loc_id,
+                Location.name,
+                Location.district,
                 Action.name,
                 Action.dialog,
                 Action.events,
@@ -21,7 +23,7 @@ async def get_all_Action() -> "DataFrame":
                 Action.date_update,
             ]
         )
-        .select_from(Action.outerjoin(User))
+        .select_from(Action.join(User).join(Location))
         .order_by(Action.id)
         .gino.all()
     )
@@ -31,6 +33,8 @@ async def get_all_Action() -> "DataFrame":
         columns=[
             "id",
             "loc_id",
+            "location",
+            "district",
             "name",
             "dialog",
             "events",

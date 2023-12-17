@@ -12,11 +12,24 @@ from func import (
     get_all_Sticker,
     get_all_Item,
     get_all_Dialog,
+    get_all_Action,
+    get_all_Event,
+    get_all_LocDescription,
 )
 from mdls import User
 
 
-COMMANDS = ["MessText", "Location", "PersonDefault", "Sticker", "Item", "Dialog"]
+COMMANDS = [
+    "MessText",
+    "Location",
+    "PersonDefault",
+    "Sticker",
+    "Item",
+    "Dialog",
+    "Action",
+    "Event",
+    "LocDescription",
+]
 
 
 @router.message(Command(commands=COMMANDS))
@@ -36,6 +49,9 @@ async def get_files(message: Message):
         "Sticker": get_all_Sticker(),
         "Item": get_all_Item(),
         "Dialog": get_all_Dialog(),
+        "Action": get_all_Action(),
+        "Event": get_all_Event(),
+        "LocDescription": get_all_LocDescription(),
     }.get(COMMAND)
 
     if FUNC is None:

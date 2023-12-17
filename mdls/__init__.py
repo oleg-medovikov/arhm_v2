@@ -14,6 +14,7 @@ from .NoteText import NoteText
 from .Dialog import Dialog
 from .Action import Action
 from .Event import Event
+from .LocDescription import LocDescription
 
 __all__ = [
     "User",
@@ -32,4 +33,5 @@ __all__ = [
     "Dialog",
     "Action",
     "Event",
+    "LocDescription",
 ]
