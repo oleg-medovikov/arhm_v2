@@ -10,6 +10,8 @@ from func import (
     read_Sticker,
     read_Item,
     read_Dialog,
+    read_Action,
+    read_Event,
 )
 from mdls import User
 
@@ -36,6 +38,8 @@ async def update_base(message: Message, bot: Bot):
         "Sticker.xlsx": read_Sticker(user),
         "Item.xlsx": read_Item(user),
         "Dialog.xlsx": read_Dialog(user),
+        "Action.xlsx": read_Action(user),
+        "Event.xlsx": read_Event(user),
     }.get(file_name)
 
     if FUNC is None:
