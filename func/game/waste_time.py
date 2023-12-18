@@ -4,7 +4,7 @@ from mdls import Person
 from conf import MAX_HUNGER, MAX_WEARY
 
 
-async def spend_time(person: Person, spend_time: int) -> "Person":
+async def waste_time(person: Person, spend_time: int) -> "Person":
     """
     Тратим время, в зависимости от скорости персонажа
     попутно увеличиваем голод и усталость,

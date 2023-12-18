@@ -11,7 +11,7 @@ class Event(db.Model):
     description = db.Column(db.String)
     stick_id = db.Column(db.SmallInteger(), db.ForeignKey("sticker.id"), nullable=True)
     single_use = db.Column(db.Boolean)
-    spend_time = db.Column(db.SmallInteger)
+    waste_time = db.Column(db.SmallInteger)
 
     # если монстр, то какой
     monster = db.Column(db.SmallInteger, nullable=True)

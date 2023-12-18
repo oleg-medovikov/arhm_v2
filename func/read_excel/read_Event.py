@@ -15,7 +15,7 @@ async def read_Event(user: User) -> str:
             "description",
             "stick_id",
             "single_use",
-            "spend_time",
+            "waste_time",
             "monster",
             "demand",
             "mess_prise",
@@ -55,7 +55,7 @@ async def read_Event(user: User) -> str:
                 Event.description == row["description"],
                 Event.stick_id == row["stick_id"],
                 Event.single_use == row["single_use"],
-                Event.spend_time == row["spend_time"],
+                Event.waste_time == row["waste_time"],
                 Event.monster == row["monster"],
                 Event.mess_prise == row["mess_prise"],
                 Event.mess_punish == row["mess_punish"],
@@ -67,37 +67,26 @@ async def read_Event(user: User) -> str:
         # есть есть строчка с такимже id - апдейтим
         action = await Event.query.where(Event.id == row["id"]).gino.first()
         if action is not None:
+            row["u_id"] = user.id
+            row["date_update"] = datetime.now()
             await action.update(
-                name=row["name"],
-                description=row["description"],
-                stick_id=row["stick_id"],
-                single_use=row["single_use"],
-                spend_time=row["spend_time"],
-                monster=row["monster"],
-                demand=row["demand"],
-                prise=row["prise"],
-                punish=row["punish"],
-                mess_prise=row["mess_prise"],
-                mess_punish=row["mess_punish"],
-                u_id=user.id,
-                date_update=datetime.now(),
+                **{
+                    key: value
+                    for key, value in row.items()
+                    if key in Event.__table__.columns
+                }
             ).apply()
             mess += f"\nОбновил строку: {row['name']}"
             continue
+
         # или создаем новую строку
+        row["u_id"] = user.id
         await Event.create(
-            name=row["name"],
-            description=row["description"],
-            stick_id=row["stick_id"],
-            single_use=row["single_use"],
-            spend_time=row["spend_time"],
-            monster=row["monster"],
-            demand=row["demand"],
-            prise=row["prise"],
-            punish=row["punish"],
-            mess_prise=row["mess_prise"],
-            mess_punish=row["mess_punish"],
-            u_id=user.id,
+            **{
+                key: value
+                for key, value in row.items()
+                if key in Event.__table__.columns
+            }
         )
         mess += f"\nДобавил строку: {row['name']}"
 

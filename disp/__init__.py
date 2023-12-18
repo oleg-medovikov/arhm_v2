@@ -11,6 +11,7 @@ from .start.register import (
 from .start.continue_game import continue_game
 
 from .action.action_main import action_main
+from .action.event_start import event_start
 
 from .prep.prep_main import prep_main
 from .prep.read_notes import read_notes
@@ -47,6 +48,7 @@ __all__ = [
     "continue_game",
     # action
     "action_main",
+    "event_start",
     # prep
     "prep_main",
     "read_notes",

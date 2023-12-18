@@ -40,7 +40,7 @@ async def action_main(callback: CallbackQuery, callback_data: CallAction, bot: B
 
     DICT = {}
     for action in actions:
-        if demand(person, action.demand):
+        if await demand(person, action.demand):
             if action.dialog is None:
                 DICT[action.name] = CallAction(
                     action="event_start",
