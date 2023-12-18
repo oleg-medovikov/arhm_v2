@@ -38,6 +38,7 @@ async def continue_game(callback: CallbackQuery, callback_data: CallPerson, bot:
             person_id=person.id,
             profession=person.profession,
             loc_id=person.loc_id,
+            action_id=0,
         ).pack(),
     }
 
