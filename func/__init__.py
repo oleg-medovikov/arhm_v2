@@ -17,6 +17,7 @@ from .game.item_using import item_using
 from .game.item_remove import item_remove
 from .game.item_description import item_description
 from .game.waste_time import waste_time
+from .game.check import check
 
 from .get_excel.get_all_MessText import get_all_MessText
 from .get_excel.get_all_Location import get_all_Location
@@ -60,6 +61,7 @@ __all__ = [
     "item_remove",
     "item_description",
     "waste_time",
+    "check",
     # get_excel
     "get_all_MessText",
     "get_all_Location",

@@ -47,8 +47,7 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
         sticker = await Sticker.get(event.stick_id)
         await update_sticker(callback.from_user.id, sticker.name, bot)
 
-    if len(event.demand) == 0:
-        # это пассивный эвент, просто отправляем описание и кнопку вернуться
+    if 'choice' not in event.demand:
         # тратим время
         person = await Person.get(callback_data.person_id)
         person = await waste_time(person, event.waste_time)
@@ -65,8 +64,9 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
                 ).pack()
             }
             return await update_message(callback.message, mess, add_keyboard(DICT))
-        else:
-            # просто проходим ивент, предлагая вернуться к выбору действий
+        
+        if len(event.demand) == 0:
+            # это пассивный эвент, просто отправляем описание и кнопку вернуться
             DICT = {
                 "продолжить": CallAction(
                     action="action_main",
@@ -80,5 +80,7 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
                 callback.message, event.description, add_keyboard(DICT)
             )
     # если ивент с проверками, но без выбора вариантов
+    if 'choice' not in event.demand:
+
 
     # тут нужно поставить условие, что игрок в состоянии прохождения ивента
