@@ -1,4 +1,4 @@
-from mdls import Person
+from mdls import Person, Inventory
 
 
 L_STANDART = [
@@ -26,6 +26,15 @@ async def person_change(person: Person, DICT: dict, negative=False) -> "Person":
     """
     updates = {}
     for key, value in DICT.items():
+        # отдельная логика для добавления предмета
+        if key == "item":
+            inv = await Inventory.get(person.i_id)
+            if value not in inv.get_all():
+                inv.bag.append(value)
+                await inv.update(**{"bag": inv.bag}).apply()
+            continue
+
+        # теперь смотрим чтобы параметр был у person
         try:
             old = getattr(person, key)
         except AttributeError:

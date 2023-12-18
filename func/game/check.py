@@ -12,7 +12,7 @@ DICT_CHECK = {
 }
 
 
-async def check(person: Person, DICT: dict) -> list:
+def check(person: Person, DICT: dict) -> list:
     """
     проходим проверки на параметры персонажа,
     кидаем кубики нужное количество раз,
@@ -20,12 +20,18 @@ async def check(person: Person, DICT: dict) -> list:
     возвращаем словарь с ходом прохождения проверки
     """
     list_ = []
+    # проверок может быть в теории несколько
     for PARAM, VALUE in DICT.items():
-        # проверок может быть в теории несколько
+        # если затесалась ошибка в параметре - игнорируем
         if PARAM not in DICT_CHECK.keys():
-            # если затесалась ошибка в параметре - игнорируем
-            print(f"ivent ошибка в check! {PARAM}")
+            print(f"ivent ошибка в check! {PARAM}, {VALUE}")
             continue
+        if not isinstance(VALUE, int):
+            if isinstance(VALUE, str) and not VALUE.isdigit():
+                print(f"ivent ошибка в check! {PARAM}, {VALUE}")
+                continue
+            else:
+                VALUE = int(VALUE)
 
         # 5% шанс дополнительного броска за каждую единицу удачи
         LUCK = sum(randint(0, 100) // 95 for _ in range(person.luck))
@@ -43,21 +49,22 @@ async def check(person: Person, DICT: dict) -> list:
 
         # нужно сформировать сообщение
 
-        MESS = f"\n\nВы проходите проверку {DICT_CHECK.get(PARAM)}\n"
-        MESS += f"всего у Вас попыток: {COUNT}" + (
-            f" из которых {LUCK} благодаря удаче\n" if LUCK else "\n"
+        MESS = f"\n\nВы проходите проверку {DICT_CHECK.get(PARAM)}\n\n"
+        MESS += f"всего у Вас {COUNT} бросков" + (
+            f"\nи ещё {LUCK} благодаря удаче\n\n" if LUCK else "\n\n"
         )
         for _ in NUMBERS:
             MESS += f"  {_}\ufe0f\u20e3  "
 
-        if not bool(CHECK_PASSED):
-            MESS += f"\nВам не удалось пройти проверку {DICT_CHECK.get(PARAM)}"
+        if bool(CHECK_PASSED):
+            MESS += f"\n\nВам удалось пройти проверку {DICT_CHECK.get(PARAM)}!"
         else:
-            MESS += f"\nВам удалось пройти проверку {DICT_CHECK.get(PARAM)}!"
+            MESS += f"\n\nВам не удалось пройти проверку {DICT_CHECK.get(PARAM)}"
 
         list_.append(
             {
                 "param": PARAM,
+                "sucsess": bool(CHECK_PASSED),
                 "mess": MESS,
                 "luck": LUCK,
                 "count": COUNT,

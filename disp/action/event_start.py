@@ -4,7 +4,14 @@ from aiogram import F, Bot
 from random import choices
 
 from mdls import Sticker, Action, Event, Person
-from func import update_message, add_keyboard, update_sticker, waste_time
+from func import (
+    update_message,
+    add_keyboard,
+    update_sticker,
+    waste_time,
+    check,
+    person_change,
+)
 from call import CallPerson, CallAction
 
 
@@ -47,7 +54,7 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
         sticker = await Sticker.get(event.stick_id)
         await update_sticker(callback.from_user.id, sticker.name, bot)
 
-    if 'choice' not in event.demand:
+    if "choice" not in event.demand:
         # тратим время
         person = await Person.get(callback_data.person_id)
         person = await waste_time(person, event.waste_time)
@@ -64,23 +71,31 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
                 ).pack()
             }
             return await update_message(callback.message, mess, add_keyboard(DICT))
-        
-        if len(event.demand) == 0:
-            # это пассивный эвент, просто отправляем описание и кнопку вернуться
-            DICT = {
-                "продолжить": CallAction(
-                    action="action_main",
-                    person_id=callback_data.person_id,
-                    profession=callback_data.profession,
-                    loc_id=callback_data.loc_id,
-                    action_id=0,
-                ).pack()
-            }
-            return await update_message(
-                callback.message, event.description, add_keyboard(DICT)
-            )
-    # если ивент с проверками, но без выбора вариантов
-    if 'choice' not in event.demand:
+        # если ивент с проверками, но без выбора вариантов
+        mess = event.description
+        sucsess = None
+        for dict_ in check(person, event.demand):
+            mess += dict_.get("mess", "")
+            sucsess = dict_["sucsess"]
+            if sucsess is False:
+                break
 
+        if sucsess is True:
+            mess += "\n\n" + event.mess_prise
+            await person_change(person, event.prise)
+        elif sucsess is False:
+            mess += "\n\n" + event.mess_punish
+            await person_change(person, event.punish)
+        DICT = {
+            "продолжить": CallAction(
+                action="action_main",
+                person_id=callback_data.person_id,
+                profession=callback_data.profession,
+                loc_id=callback_data.loc_id,
+                action_id=0,
+            ).pack()
+        }
+        return await update_message(callback.message, mess, add_keyboard(DICT))
 
+    # if 'choice' not in event.demand:
     # тут нужно поставить условие, что игрок в состоянии прохождения ивента
