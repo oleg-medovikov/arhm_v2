@@ -17,7 +17,7 @@ async def read_Action(user: User) -> str:
             "events",
             "weights",
             "demand",
-            "person",
+            "profession",
             "stage",
         ],
     )
@@ -43,7 +43,7 @@ async def read_Action(user: User) -> str:
                 Action.dialog == row["dialog"],
                 Action.events == row["events"],
                 Action.weights == row["weights"],
-                Action.person == row["person"],
+                Action.profession == row["profession"],
                 Action.stage == row["stage"],
             )
         ).gino.first()
@@ -59,13 +59,13 @@ async def read_Action(user: User) -> str:
                 dialog=row["dialog"],
                 events=row["events"],
                 weights=row["weights"],
-                demaind=row["demaind"],
-                person=row["person"],
+                demand=row["demand"],
+                profession=row["profession"],
                 stage=row["stage"],
                 u_id=user.id,
                 date_update=datetime.now(),
             ).apply()
-            mess += f"\n Обновил строку {row['name']}"
+            mess += f"\nОбновил строку: {row['name']}"
             continue
         # или создаем новую строку
         await Action.create(
@@ -74,12 +74,12 @@ async def read_Action(user: User) -> str:
             dialog=row["dialog"],
             events=row["events"],
             weights=row["weights"],
-            demaind=row["demaind"],
-            person=row["person"],
+            demand=row["demand"],
+            profession=row["profession"],
             stage=row["stage"],
             u_id=user.id,
         )
-        mess += f"\n Добавил строку {row['d_id']} {row['q_id']}"
+        mess += f"\nДобавил строку: {row['name']}"
 
     if mess == "":
         mess = "Нечего изменять"

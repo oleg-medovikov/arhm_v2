@@ -58,7 +58,7 @@ async def read_LocDescription(user: User) -> str:
                 u_id=user.id,
                 date_update=datetime.now(),
             ).apply()
-            mess += f"\n Обновил строку {row['name']}"
+            mess += f"\n Обновил строку {row['id']}"
             continue
         # или создаем новую строку
         await LocDescription.create(

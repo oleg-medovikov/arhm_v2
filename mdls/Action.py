@@ -15,7 +15,7 @@ class Action(db.Model):
     weights = db.Column(db.ARRAY(db.Float), nullable=True)
 
     demand = db.Column(db.JSON, nullable=True)
-    person = db.Column(db.String)
+    profession = db.Column(db.String)
     stage = db.Column(db.SmallInteger)
 
     u_id = db.Column(db.Integer(), db.ForeignKey("users.id"))

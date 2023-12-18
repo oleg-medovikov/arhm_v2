@@ -37,9 +37,13 @@ async def read_Event(user: User) -> str:
             if not isinstance(row[key], int):
                 row[key] = None
 
-        for key in ['description', 'mess_prise', 'mess_punish']:
+        for key in ["single_use"]:
+            if not isinstance(row[key], bool):
+                row[key] = bool(row[key])
+
+        for key in ["description", "mess_prise", "mess_punish"]:
             if isinstance(row[key], str):
-                row[key] = row[key].replace('\u2028','\n')
+                row[key] = row[key].replace("\u2028", "\n")
             else:
                 row[key] = None
 
@@ -70,32 +74,32 @@ async def read_Event(user: User) -> str:
                 single_use=row["single_use"],
                 spend_time=row["spend_time"],
                 monster=row["monster"],
-                demand=row["demaind"],
+                demand=row["demand"],
                 prise=row["prise"],
-                punish=row["panish"],
+                punish=row["punish"],
                 mess_prise=row["mess_prise"],
                 mess_punish=row["mess_punish"],
                 u_id=user.id,
                 date_update=datetime.now(),
             ).apply()
-            mess += f"\n Обновил строку {row['name']}"
+            mess += f"\nОбновил строку: {row['name']}"
             continue
         # или создаем новую строку
         await Event.create(
-                name=row["name"],
-                description=row["description"],
-                stick_id=row["stick_id"],
-                single_use=row["single_use"],
-                spend_time=row["spend_time"],
-                monster=row["monster"],
-                demand=row["demaind"],
-                prise=row["prise"],
-                punish=row["panish"],
-                mess_prise=row["mess_prise"],
-                mess_punish=row["mess_punish"],
-                u_id=user.id,
+            name=row["name"],
+            description=row["description"],
+            stick_id=row["stick_id"],
+            single_use=row["single_use"],
+            spend_time=row["spend_time"],
+            monster=row["monster"],
+            demand=row["demand"],
+            prise=row["prise"],
+            punish=row["punish"],
+            mess_prise=row["mess_prise"],
+            mess_punish=row["mess_punish"],
+            u_id=user.id,
         )
-        mess += f"\n Добавил строку {row['name']}"
+        mess += f"\nДобавил строку: {row['name']}"
 
     if mess == "":
         mess = "Нечего изменять"

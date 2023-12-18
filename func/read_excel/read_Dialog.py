@@ -79,7 +79,7 @@ async def read_Dialog(user: User) -> str:
             sale_costs=row["sale_items"],
             u_id=user.id,
         )
-        mess += f"\n Добавил строку {row['d_id']} {row['q_id']}"
+        mess += f"\nДобавил строку: {row['d_id']} {row['q_id']}"
 
     if mess == "":
         mess = "Нечего изменять"
