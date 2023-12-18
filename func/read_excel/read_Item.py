@@ -33,20 +33,30 @@ async def read_Item(user: User) -> str:
 
     mess = ""
     for row in df.to_dict("records"):
-        
-        for key in ['demand', 'effect']:
+        for key in ["demand", "effect"]:
             if isinstance(row[key], str):
                 row[key] = loads(row[key].replace("'", '"').lower())
             else:
                 row[key] = {}
 
+        for key in ["stick_id", "emoji"]:
+            if not isinstance(row[key], int) or not isinstance(row[key], str):
+                row[key] = None
+
         # делаем из False false
-        row['single_use'] = bool(row['single_use'])
-        row['achievement'] = bool(row['achievement'])
-        
-        for key in ['description', 'mess_equip', 'mess_equip_fail', 'mess_remove','mess_remove_fail', 'mess_drop']:
+        row["single_use"] = bool(row["single_use"])
+        row["achievement"] = bool(row["achievement"])
+
+        for key in [
+            "description",
+            "mess_equip",
+            "mess_equip_fail",
+            "mess_remove",
+            "mess_remove_fail",
+            "mess_drop",
+        ]:
             if isinstance(row[key], str):
-                row[key] = row[key].replace('\u2028','\n')
+                row[key] = row[key].replace("\u2028", "\n")
             else:
                 row[key] = None
 
@@ -120,9 +130,9 @@ async def read_Item(user: User) -> str:
             cost=row["cost"],
             alternative=row["alternative"],
             single_use=row["single_use"],
-            achievement=row["achievement"],               
+            achievement=row["achievement"],
             u_id=user.id,
-                )
+        )
         mess += f"\n Добавил строку {row['name']}"
 
     if mess == "":
