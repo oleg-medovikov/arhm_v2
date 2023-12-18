@@ -41,13 +41,14 @@ async def action_main(callback: CallbackQuery, callback_data: CallAction, bot: B
     DICT = {}
     for action in actions:
         if demand(person, action.demand):
-            DICT[action.name] = CallAction(
-                action="event_start",
-                person_id=person.id,
-                profession=person.profession,
-                loc_id=person.loc_id,
-                action_id=action.id,
-            ).pack()
+            if action.dialog is None:
+                DICT[action.name] = CallAction(
+                    action="event_start",
+                    person_id=person.id,
+                    profession=person.profession,
+                    loc_id=person.loc_id,
+                    action_id=action.id,
+                ).pack()
 
     DICT["назад"] = CallPerson(
         action="continue_game",
