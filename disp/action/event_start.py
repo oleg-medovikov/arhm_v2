@@ -1,10 +1,10 @@
 from disp.action import router
 from aiogram.types import CallbackQuery
 from aiogram import F, Bot
-from random import choices
+from random import choice, choices
 
 from conf import emoji
-from mdls import Sticker, Action, Event, Person
+from mdls import Sticker, Action, Event, Person, ActionLog
 from func import (
     update_message,
     add_keyboard,
@@ -89,13 +89,25 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
             sucsess = dict_["sucsess"]
             if sucsess is False:
                 break
-
+        location = person.loc_id
         if sucsess is True:
             mess += "\n\n" + event.mess_prise
-            await person_change(person, event.prise)
+            person = await person_change(person, event.prise)
         elif sucsess is False:
             mess += "\n\n" + event.mess_punish
-            await person_change(person, event.punish)
+            person = await person_change(person, event.punish)
+
+        # создать лог по прохождению события
+        await ActionLog.create(
+            p_id=person.id,
+            gametime=person.gametime,
+            a_id=callback_data.action_id,
+            finish=True,
+            e_id=event.id,
+            check=sucsess,
+            loc_start=location,
+            loc_finish=person.loc_id,
+        )
         DICT = {
             "продолжить": CallAction(
                 action="action_main",
@@ -108,7 +120,17 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
         return await update_message(callback.message, mess, add_keyboard(DICT))
 
     if "choice" in event.demand:
-        # тут нужно поставить условие, что игрок в состоянии прохождения ивента
+        # создать лог по прохождению события
+
+        await ActionLog.create(
+            p_id=person.id,
+            gametime=person.gametime,
+            a_id=callback_data.action_id,
+            finish=False,
+            e_id=event.id,
+            loc_start=person.loc_id,
+        )
+
         for i, key in enumerate(event.demand["choice"]):
             DICT[key] = CallEvent(
                 action="event_end",
