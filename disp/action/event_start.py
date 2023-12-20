@@ -3,6 +3,7 @@ from aiogram.types import CallbackQuery
 from aiogram import F, Bot
 from random import choices
 
+from conf import emoji
 from mdls import Sticker, Action, Event, Person
 from func import (
     update_message,
@@ -11,6 +12,7 @@ from func import (
     waste_time,
     check,
     person_change,
+    timedelta_to_str,
 )
 from call import CallPerson, CallAction
 
@@ -54,25 +56,28 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
         sticker = await Sticker.get(event.stick_id)
         await update_sticker(callback.from_user.id, sticker.name, bot)
 
+    # тратим время
+    person = await Person.get(callback_data.person_id)
+    gametime = person.gametime
+    person = await waste_time(person, event.waste_time)
+    time_mess = timedelta_to_str(person.gametime - gametime)
+
+    # добавить сюда подарок и наказание, если они не пустые (не обязательно)
+    if person.death:
+        # Если персонаж внезапно умер
+        mess = "похоже случилось непоправимое"
+        DICT = {
+            "...": CallPerson(
+                action="continue_game",
+                person_id=callback_data.person_id,
+                profession=callback_data.profession,
+                i_id=0,
+            ).pack()
+        }
+        return await update_message(callback.message, mess, add_keyboard(DICT))
     if "choice" not in event.demand:
-        # тратим время
-        person = await Person.get(callback_data.person_id)
-        person = await waste_time(person, event.waste_time)
-        # добавить сюда подарок и наказание, если они не пустые (не обязательно)
-        if person.death:
-            # Если персонаж внезапно умер
-            mess = "похоже случилось непоправимое"
-            DICT = {
-                "...": CallPerson(
-                    action="continue_game",
-                    person_id=callback_data.person_id,
-                    profession=callback_data.profession,
-                    i_id=0,
-                ).pack()
-            }
-            return await update_message(callback.message, mess, add_keyboard(DICT))
         # если ивент с проверками, но без выбора вариантов
-        mess = event.description
+        mess = emoji("clock") + " " + time_mess + "\n\n" + event.description
         sucsess = None
         for dict_ in check(person, event.demand):
             mess += dict_.get("mess", "")
