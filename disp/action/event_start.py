@@ -14,7 +14,7 @@ from func import (
     person_change,
     timedelta_to_str,
 )
-from call import CallPerson, CallAction
+from call import CallPerson, CallAction, CallEvent
 
 
 @router.callback_query(CallAction.filter(F.action == "event_start"))
@@ -58,10 +58,9 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
 
     # тратим время
     person = await Person.get(callback_data.person_id)
-    gametime = person.gametime
+    event_time = person.gametime
     person = await waste_time(person, event.waste_time)
-    time_mess = timedelta_to_str(person.gametime - gametime)
-
+    event_time = person.gametime - event_time
     # добавить сюда подарок и наказание, если они не пустые (не обязательно)
     if person.death:
         # Если персонаж внезапно умер
@@ -77,7 +76,13 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
         return await update_message(callback.message, mess, add_keyboard(DICT))
     if "choice" not in event.demand:
         # если ивент с проверками, но без выбора вариантов
-        mess = emoji("clock") + " " + time_mess + "\n\n" + event.description
+        mess = (
+            emoji("clock")
+            + " "
+            + timedelta_to_str(event_time)
+            + "\n\n"
+            + event.description
+        )
         sucsess = None
         for dict_ in check(person, event.demand):
             mess += dict_.get("mess", "")
@@ -102,5 +107,19 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
         }
         return await update_message(callback.message, mess, add_keyboard(DICT))
 
-    # if 'choice' not in event.demand:
-    # тут нужно поставить условие, что игрок в состоянии прохождения ивента
+    if "choice" in event.demand:
+        # тут нужно поставить условие, что игрок в состоянии прохождения ивента
+        for i, key in enumerate(event.demand["choice"]):
+            DICT[key] = CallEvent(
+                action="event_end",
+                person_id=callback_data.person_id,
+                profession=callback_data.profession,
+                loc_id=callback_data.loc_id,
+                event_id=event.id,
+                choice=i,
+                event_time=event_time,
+            )
+
+        return await update_message(
+            callback.message, event.description, add_keyboard(DICT)
+        )
