@@ -1,7 +1,7 @@
 from aiogram.filters.callback_data import CallbackData
 
 
-class CallPerson(CallbackData, prefix="t"):
+class CallEvent(CallbackData, prefix="t"):
     action: str
     person_id: int
     profession: str
