@@ -54,23 +54,24 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
         sticker = await Sticker.get(event.stick_id)
         await update_sticker(callback.from_user.id, sticker.name, bot)
 
-    if "choice" not in event.demand:
+    person = await Person.get(callback_data.person_id)
+    if event.waste_time:
         # тратим время
-        person = await Person.get(callback_data.person_id)
         person = await waste_time(person, event.waste_time)
-        # добавить сюда подарок и наказание, если они не пустые (не обязательно)
-        if person.death:
-            # Если персонаж внезапно умер
-            mess = "похоже случилось непоправимое"
-            DICT = {
-                "...": CallPerson(
-                    action="continue_game",
-                    person_id=callback_data.person_id,
-                    profession=callback_data.profession,
-                    i_id=0,
-                ).pack()
-            }
-            return await update_message(callback.message, mess, add_keyboard(DICT))
+    # добавить сюда подарок и наказание, если они не пустые (не обязательно)
+    if person.death:
+        # Если персонаж внезапно умер
+        mess = "похоже случилось непоправимое"
+        DICT = {
+            "...": CallPerson(
+                action="continue_game",
+                person_id=callback_data.person_id,
+                profession=callback_data.profession,
+                i_id=0,
+            ).pack()
+        }
+        return await update_message(callback.message, mess, add_keyboard(DICT))
+    if "choice" not in event.demand:
         # если ивент с проверками, но без выбора вариантов
         mess = event.description
         sucsess = None
