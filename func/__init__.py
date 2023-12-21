@@ -18,6 +18,8 @@ from .game.item_remove import item_remove
 from .game.item_description import item_description
 from .game.waste_time import waste_time
 from .game.check import check
+from .game.time_to_str import time_to_str
+from .game.time_to_str import timedelta_to_str
 
 from .get_excel.get_all_MessText import get_all_MessText
 from .get_excel.get_all_Location import get_all_Location
@@ -62,6 +64,8 @@ __all__ = [
     "item_description",
     "waste_time",
     "check",
+    "time_to_str",
+    "timedelta_to_str",
     # get_excel
     "get_all_MessText",
     "get_all_Location",

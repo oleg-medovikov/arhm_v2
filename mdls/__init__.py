@@ -15,6 +15,8 @@ from .Dialog import Dialog
 from .Action import Action
 from .Event import Event
 from .LocDescription import LocDescription
+from .Monster import Monster
+from .ActionLog import ActionLog
 
 __all__ = [
     "User",
@@ -34,4 +36,6 @@ __all__ = [
     "Action",
     "Event",
     "LocDescription",
+    "Monster",
+    "ActionLog",
 ]
