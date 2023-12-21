@@ -7,3 +7,4 @@ class CallAction(CallbackData, prefix="t"):
     profession: str
     loc_id: int
     action_id: int
+    event: int

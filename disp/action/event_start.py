@@ -23,6 +23,8 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
     Перед тем как начать ивент, необходимо его выбрать,
     у действия есть список ивентов и список весовых коэффициентов,
     влияющих на частоту выпадания ивента. проверок здесь нет.
+    Если ивент в каллэкшене не равен нулю - значит, персонаж уже
+    в состоянии прохождения ивента!
     """
     DICT = {}
     # достаем действие и выбираем ивент
@@ -30,7 +32,9 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
     # тут нужна проверка на single_use проходил ли игрок эти разовые ивенты
 
     # ===============
-    if len(action.events):
+    if callback_data.event != 0:
+        event_id = callback_data.event
+    elif len(action.events):
         event_id = choices(action.events, weights=action.weights)[0]
     else:
         # если для этого действия нет доступных ивентов
@@ -56,26 +60,26 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
         sticker = await Sticker.get(event.stick_id)
         await update_sticker(callback.from_user.id, sticker.name, bot)
 
-    # тратим время
-    person = await Person.get(callback_data.person_id)
-    event_time = person.gametime
-    person = await waste_time(person, event.waste_time)
-    event_time = person.gametime - event_time
-    # добавить сюда подарок и наказание, если они не пустые (не обязательно)
-    if person.death:
-        # Если персонаж внезапно умер
-        mess = "похоже случилось непоправимое"
-        DICT = {
-            "...": CallPerson(
-                action="continue_game",
-                person_id=callback_data.person_id,
-                profession=callback_data.profession,
-                i_id=0,
-            ).pack()
-        }
-        return await update_message(callback.message, mess, add_keyboard(DICT))
     if "choice" not in event.demand:
-        # если ивент с проверками, но без выбора вариантов
+        # тратим время
+        person = await Person.get(callback_data.person_id)
+        event_time = person.gametime
+        person = await waste_time(person, event.waste_time)
+        event_time = person.gametime - event_time
+        # добавить сюда подарок и наказание, если они не пустые (не обязательно)
+        if person.death:
+            # Если персонаж внезапно умер
+            mess = "похоже случилось непоправимое"
+            DICT = {
+                "...": CallPerson(
+                    action="continue_game",
+                    person_id=callback_data.person_id,
+                    profession=callback_data.profession,
+                    i_id=0,
+                ).pack()
+            }
+            return await update_message(callback.message, mess, add_keyboard(DICT))
+            # если ивент с проверками, но без выбора вариантов
         mess = (
             emoji("clock")
             + " "
@@ -121,25 +125,27 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
 
     if "choice" in event.demand:
         # создать лог по прохождению события
-
-        await ActionLog.create(
-            p_id=person.id,
-            gametime=person.gametime,
-            a_id=callback_data.action_id,
-            finish=False,
-            e_id=event.id,
-            loc_start=person.loc_id,
-        )
+        if callback_data.event == 0:
+            # это первый запуск ивента, а не повторный
+            person = await Person.get(callback_data.person_id)
+            await ActionLog.create(
+                p_id=person.id,
+                gametime=person.gametime,
+                a_id=callback_data.action_id,
+                finish=False,
+                e_id=event.id,
+                loc_start=person.loc_id,
+            )
 
         for i, key in enumerate(event.demand["choice"]):
+            # тут i = 0 это true
             DICT[key] = CallEvent(
                 action="event_end",
                 person_id=callback_data.person_id,
                 profession=callback_data.profession,
                 loc_id=callback_data.loc_id,
                 event_id=event.id,
-                choice=i,
-                event_time=event_time,
+                choice=False if i else True,
             )
 
         return await update_message(

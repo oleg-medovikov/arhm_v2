@@ -1,19 +1,43 @@
 from disp.start import router
 from aiogram.types import CallbackQuery
 from aiogram import F, Bot
+from sqlalchemy import and_, false
 
 
 from func import update_message, add_keyboard, update_sticker, person_status_card
-from mdls import Person
+from mdls import Person, ActionLog
 from call import CallPerson, CallInventory, CallAction
 
 
 @router.callback_query(CallPerson.filter(F.action == "continue_game"))
 async def continue_game(callback: CallbackQuery, callback_data: CallPerson, bot: Bot):
     person = await Person.get(callback_data.person_id)
-
     # неплохо тут сделать проверку, живой ли персонаж
 
+    # тут делаем проверку на наличие незаконченных действий
+    action = (
+        await ActionLog.load(person=Person)
+        .query.where(
+            and_(
+                ActionLog.person == callback_data.person_id, ActionLog.finish == false()
+            )
+        )
+        .gino.first()
+    )
+    if action is not None:
+        if action.e_id:
+            mess = "У Вас незаконченное событие!"
+            DICT = {
+                "Понятно": CallAction(
+                    action="event_start",
+                    person_id=person.id,
+                    profession=person.profession,
+                    loc_id=person.loc_id,
+                    action_id=action.a_id,
+                    event=action.e_id,
+                ).pack(),
+            }
+            return await update_message(callback.message, mess, add_keyboard(DICT))
     # ===============================================
 
     mess = person_status_card(person)
@@ -39,6 +63,7 @@ async def continue_game(callback: CallbackQuery, callback_data: CallPerson, bot:
             profession=person.profession,
             loc_id=person.loc_id,
             action_id=0,
+            event=0,
         ).pack(),
     }
 

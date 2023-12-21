@@ -48,6 +48,7 @@ async def action_main(callback: CallbackQuery, callback_data: CallAction, bot: B
                     profession=person.profession,
                     loc_id=person.loc_id,
                     action_id=action.id,
+                    event=0,
                 ).pack()
 
     DICT["назад"] = CallPerson(

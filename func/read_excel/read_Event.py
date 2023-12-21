@@ -15,6 +15,7 @@ async def read_Event(user: User) -> str:
             "description",
             "stick_id",
             "single_use",
+            "write_to_note",
             "waste_time",
             "monster",
             "demand",
@@ -37,7 +38,7 @@ async def read_Event(user: User) -> str:
             if not isinstance(row[key], int):
                 row[key] = None
 
-        for key in ["single_use"]:
+        for key in ["single_use", "write_to_note"]:
             if not isinstance(row[key], bool):
                 row[key] = bool(row[key])
 
@@ -55,6 +56,7 @@ async def read_Event(user: User) -> str:
                 Event.description == row["description"],
                 Event.stick_id == row["stick_id"],
                 Event.single_use == row["single_use"],
+                Event.write_to_note == row["write_to_note"],
                 Event.waste_time == row["waste_time"],
                 Event.monster == row["monster"],
                 Event.mess_prise == row["mess_prise"],
