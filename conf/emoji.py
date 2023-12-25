@@ -45,6 +45,7 @@ Dict_emoji = {
     "bouquet": "\U0001F490",
     "swords": "\u2694",
     "magic": "\U0001fa84",
+    "whisky": "\U0001F943",
 }
 
 

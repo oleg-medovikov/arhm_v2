@@ -1,5 +1,6 @@
 from base import db
 from datetime import datetime
+from sqlalchemy.dialects.postgresql import JSONB
 
 
 class Effect(db.Model):
@@ -9,13 +10,13 @@ class Effect(db.Model):
     id = db.Column(db.SmallInteger, primary_key=True)
     name = db.Column(db.String)
     # действие
-    impact = db.Column(db.JSON)
+    impact = db.Column(JSONB)
     # продолжительность действия
     duration = db.Column(db.SmallInteger)
     emoji = db.Column(db.String, nullable=True)
     # увеличивается ли эффект до следующей стадии?
     # словарь всех стадий по-порядку
-    stages = db.Column(db.JSON, nullable=True)
+    stages = db.Column(JSONB, nullable=True)
 
     u_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
     date_update = db.Column(db.DateTime(), default=datetime.now())

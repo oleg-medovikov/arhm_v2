@@ -2,6 +2,7 @@ from pandas import read_excel
 from sqlalchemy import and_
 from ast import literal_eval
 from datetime import datetime
+from sqlalchemy.dialects.postgresql import JSONB
 
 from mdls import User, Effect
 
