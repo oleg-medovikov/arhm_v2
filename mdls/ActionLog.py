@@ -8,7 +8,7 @@ class ActionLog(db.Model):
 
     time = db.Column(db.DateTime, default=datetime.now(), primary_key=True)
     p_id = db.Column(db.SmallInteger, db.ForeignKey("person.id"))
-    gametime = db.Column(db.SmallInt)
+    gametime = db.Column(db.SmallInteger)
     a_id = db.Column(db.SmallInteger, db.ForeignKey("action.id"))
     # закончено ли действие
     finish = db.Column(db.Boolean)
