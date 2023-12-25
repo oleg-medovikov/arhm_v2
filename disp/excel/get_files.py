@@ -15,6 +15,7 @@ from func import (
     get_all_Action,
     get_all_Event,
     get_all_LocDescription,
+    get_all_Effect,
 )
 from mdls import User
 
@@ -29,6 +30,7 @@ COMMANDS = [
     "Action",
     "Event",
     "LocDescription",
+    "Effect",
 ]
 
 
@@ -52,6 +54,7 @@ async def get_files(message: Message):
         "Action": get_all_Action(),
         "Event": get_all_Event(),
         "LocDescription": get_all_LocDescription(),
+        "Effect": get_all_Effect(),
     }.get(COMMAND)
 
     if FUNC is None:

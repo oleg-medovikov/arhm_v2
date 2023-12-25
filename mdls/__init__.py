@@ -17,6 +17,7 @@ from .Event import Event
 from .LocDescription import LocDescription
 from .Monster import Monster
 from .ActionLog import ActionLog
+from .Effect import Effect
 
 __all__ = [
     "User",
@@ -38,4 +39,5 @@ __all__ = [
     "LocDescription",
     "Monster",
     "ActionLog",
+    "Effect",
 ]

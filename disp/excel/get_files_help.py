@@ -17,6 +17,7 @@ MESS = """*Доступные команды для редактирования
     /Action
     /Event
     /LocDescription
+    /Effect
 
     /get_emoji
 
