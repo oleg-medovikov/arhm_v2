@@ -3,7 +3,7 @@ from aiogram.types import CallbackQuery
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import Message
-from aiogram import F
+from aiogram import F, Bot
 
 from call import CallImage
 from mdls import Image
@@ -36,14 +36,15 @@ async def ask_Image_category(message: Message, state: FSMContext):
 
 
 @router.message(NewImage.category)
-async def update_Image(message: Message, state: FSMContext):
+async def update_Image(message: Message, state: FSMContext, bot: Bot):
     await state.update_data(category=message.text)
     user_data = await state.get_data()
+    image = await Image.get(user_data["image_id"])
 
-    await Image.update.values(
-        name=user_data["name"], category=user_data["category"]
-    ).where(Image.id == user_data["image_id"]).gino.status()
+    await image.update(name=user_data["name"], category=user_data["category"]).apply()
 
     # Сброс состояния и сохранённых данных у пользователя
     await state.clear()
+
+    await bot.send_sticker(message.chat.id, image.file)
     return await message.answer(f'Картинка сохранена\nid: {user_data["image_id"]}')
