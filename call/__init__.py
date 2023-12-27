@@ -8,6 +8,7 @@ from .CallNotes import CallNotes
 from .CallInventory import CallInventory
 from .CallAction import CallAction
 from .CallEvent import CallEvent
+from .CallImage import CallImage
 
 __all__ = [
     "CallSticker",
@@ -20,4 +21,5 @@ __all__ = [
     "CallInventory",
     "CallAction",
     "CallEvent",
+    "CallImage",
 ]

@@ -34,6 +34,12 @@ from .excel.get_sticker_name import (
 )
 
 from .admin.person_kill import person_kill
+from .admin.add_Image import add_Image
+from .admin.add_Image_name import (
+    ask_Image_name,
+    ask_Image_category,
+    update_Image,
+)
 
 __all__ = [
     # start
@@ -70,4 +76,8 @@ __all__ = [
     "update_sticker",
     # admin
     "person_kill",
+    "add_Image",
+    "ask_Image_name",
+    "ask_Image_category",
+    "update_Image",
 ]

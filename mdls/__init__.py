@@ -19,6 +19,7 @@ from .Monster import Monster
 from .ActionLog import ActionLog
 from .Effect import Effect
 from .PersonEffect import PersonEffect
+from .Image import Image
 
 __all__ = [
     "User",
@@ -42,4 +43,5 @@ __all__ = [
     "ActionLog",
     "Effect",
     "PersonEffect",
+    "Image",
 ]
