@@ -26,7 +26,7 @@ async def action_main(callback: CallbackQuery, callback_data: CallAction, bot: B
         )
         .gino.first()
     )
-    await update_sticker(callback.from_user.id, locd.sticker.name, bot)
+    # await update_sticker(callback.from_user.id, locd.sticker.name, bot)
     # теперь описание локации
     mess = f"*Локация: {locd.location.name}* \n\n{locd.description}"
     # вытаскиваем доступные действия, и проверяем требования к ним
@@ -58,4 +58,6 @@ async def action_main(callback: CallbackQuery, callback_data: CallAction, bot: B
         i_id=0,
     ).pack()
 
-    await update_message(callback.message, mess, add_keyboard(DICT))
+    await update_message(
+        bot, callback.message, mess, add_keyboard(DICT), image_name=locd.sticker.name
+    )

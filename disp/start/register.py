@@ -6,7 +6,13 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram import F, Bot
 from random import randint
 
-from func import update_message, add_keyboard, update_sticker, person_create, person_note_add
+from func import (
+    update_message,
+    add_keyboard,
+    update_sticker,
+    person_create,
+    person_note_add,
+)
 from mdls import MessText, PersonName
 from call import CallUser, CallSex, CallProfession, CallGamename, CallPerson
 
@@ -20,7 +26,9 @@ class NewPerson(StatesGroup):
 
 
 @router.callback_query(CallUser.filter(F.action == "register"))
-async def register_1_ask_sex(callback: CallbackQuery, callback_data: CallUser, state: FSMContext):
+async def register_1_ask_sex(
+    callback: CallbackQuery, callback_data: CallUser, state: FSMContext, bot: Bot
+):
     user_id = callback_data.user_id
     await state.update_data(user_id=user_id)
     mess = await MessText.get("register_sex")
@@ -29,22 +37,25 @@ async def register_1_ask_sex(callback: CallbackQuery, callback_data: CallUser, s
         "Мужчина": CallSex(action="ask_sex", sex=True).pack(),
         "Женщина": CallSex(action="ask_sex", sex=False).pack(),
     }
-    return await update_message(callback.message, mess.text, add_keyboard(DICT))
+    return await update_message(bot, callback.message, mess.text, add_keyboard(DICT))
 
 
 @router.callback_query(CallSex.filter(F.action == "ask_sex"))
 async def register_2_ask_profession(
-    callback: CallbackQuery, callback_data: CallSex, state: FSMContext
+    callback: CallbackQuery, callback_data: CallSex, state: FSMContext, bot: Bot
 ):
     sex = callback_data.sex
 
     if sex:
+        # это пока не ввели мужских персонажей
         mess = await MessText.get("register_no_men")
         DICT = {
             "Мужчина": CallSex(action="ask_sex", sex=True).pack(),
             "Женщина": CallSex(action="ask_sex", sex=False).pack(),
         }
-        return await update_message(callback.message, mess.text, add_keyboard(DICT))
+        return await update_message(
+            bot, callback.message, mess.text, add_keyboard(DICT)
+        )
 
     await state.update_data(sex=sex)
     mess = await MessText.get("register_profession")
@@ -56,12 +67,12 @@ async def register_2_ask_profession(
                 action="ask_profession", profession="студентка"
             ).pack(),
         }
-    return await update_message(callback.message, mess.text, add_keyboard(DICT))
+    return await update_message(bot, callback.message, mess.text, add_keyboard(DICT))
 
 
 @router.callback_query(CallProfession.filter(F.action == "ask_profession"))
 async def register_3_ask_gamename(
-        callback: CallbackQuery, callback_data: CallProfession, state: FSMContext, bot: Bot
+    callback: CallbackQuery, callback_data: CallProfession, state: FSMContext, bot: Bot
 ):
     profession = callback_data.profession
     await state.update_data(profession=profession)
@@ -69,46 +80,51 @@ async def register_3_ask_gamename(
     mess = await MessText.get(f"register_name_{profession}")
     names = await PersonName.query.where(PersonName.profession == profession).gino.all()
     DICT = {}
-    for name in names: 
-        DICT[name.gamename] = CallGamename(action='ask_gamename', gamename=name.gamename).pack()
+    for name in names:
+        DICT[name.gamename] = CallGamename(
+            action="ask_gamename", gamename=name.gamename
+        ).pack()
 
-    await update_sticker(callback.from_user.id, 'шериф', bot)
-    return await update_message(callback.message, mess.text, add_keyboard(DICT))
+    return await update_message(
+        bot, callback.message, mess.text, add_keyboard(DICT), image_name="шериф"
+    )
 
 
 @router.callback_query(CallGamename.filter(F.action == "ask_gamename"))
-async def register_4_ask_destination(callback: CallbackQuery, callback_data: CallGamename, state: FSMContext):
+async def register_4_ask_destination(
+    callback: CallbackQuery, callback_data: CallGamename, state: FSMContext, bot: Bot
+):
     gamename = callback_data.gamename
     await state.update_data(gamename=gamename)
     user_data = await state.get_data()
     mess = await MessText.get(f"register_ask_destination_{user_data['profession']}")
     destination = await MessText.get(f"register_destination_{user_data['profession']}")
-    DICT = {
-            destination.text: 'register_destination'
-            }
-    return await update_message(callback.message, mess.text, add_keyboard(DICT))
+    DICT = {destination.text: "register_destination"}
+    return await update_message(bot, callback.message, mess.text, add_keyboard(DICT))
 
 
 @router.callback_query(F.data == "register_destination")
-async def register_5_ask_dice(callback: CallbackQuery, state: FSMContext):
+async def register_5_ask_dice(callback: CallbackQuery, state: FSMContext, bot: Bot):
     user_data = await state.get_data()
     mess = await MessText.get(f"register_dice_{user_data['profession']}")
     DICT = {"Отдать письмо": "register_dice"}
-    return await update_message(callback.message, mess.text, add_keyboard(DICT))
+    return await update_message(bot, callback.message, mess.text, add_keyboard(DICT))
 
 
 @router.callback_query(F.data == "register_dice")
-async def register_6_end(callback: CallbackQuery, state: FSMContext, bot:Bot):
+async def register_6_end(callback: CallbackQuery, state: FSMContext, bot: Bot):
     # кидаем кубик на статы и вытаскиваем на время ктулху
-    value = randint(1,6)
+    value = randint(1, 6)
     await state.update_data(dice=value)
-    await update_sticker(callback.from_user.id, 'ктулху', bot)
-    mess = await MessText.get('cthulhu_dice')
+    # await update_sticker(callback.from_user.id, "ктулху", bot)
+    mess = await MessText.get("cthulhu_dice")
     if mess is not None:
-        mess = mess.text + f'\n{value}\ufe0f\u20e3'
+        mess = mess.text + f"\n{value}\ufe0f\u20e3"
     else:
-        mess = f'\n{value}\ufe0f\u20e3'
-    message = await update_message(callback.message, mess, None)
+        mess = f"\n{value}\ufe0f\u20e3"
+    message = await update_message(
+        bot, callback.message, mess, None, image_name="ктулху"
+    )
     # даем пользователю прочитать и меняем сообщение
     # тут же создаем нового персонажа
     user_data = await state.get_data()
@@ -121,22 +137,24 @@ async def register_6_end(callback: CallbackQuery, state: FSMContext, bot:Bot):
     await asyncio.sleep(5)
 
     mess_name = {
-            1: f'register_dice_{user_data["profession"]}_1-2',    
-            2: f'register_dice_{user_data["profession"]}_1-2',    
-            3: f'register_dice_{user_data["profession"]}_3-4',    
-            4: f'register_dice_{user_data["profession"]}_3-4',    
-            5: f'register_dice_{user_data["profession"]}_5-6',    
-            6: f'register_dice_{user_data["profession"]}_5-6',    
-            }[value]
+        1: f'register_dice_{user_data["profession"]}_1-2',
+        2: f'register_dice_{user_data["profession"]}_1-2',
+        3: f'register_dice_{user_data["profession"]}_3-4',
+        4: f'register_dice_{user_data["profession"]}_3-4',
+        5: f'register_dice_{user_data["profession"]}_5-6',
+        6: f'register_dice_{user_data["profession"]}_5-6',
+    }[value]
     DICT = {
-        'уйти из полицейского участка': CallPerson(
-                action='continue_game',
-                person_id=person.id,
-                profession=person.profession,
-                i_id=person.i_id
-            ).pack()
-            }
+        "уйти из полицейского участка": CallPerson(
+            action="continue_game",
+            person_id=person.id,
+            profession=person.profession,
+            i_id=person.i_id,
+        ).pack()
+    }
 
-    await update_sticker(callback.from_user.id, 'шериф', bot)
+    # await update_sticker(callback.from_user.id, "шериф", bot)
     mess = await MessText.get(mess_name)
-    return await update_message(message, mess.text, add_keyboard(DICT))
+    return await update_message(
+        bot, message, mess.text, add_keyboard(DICT), image_name="шериф"
+    )

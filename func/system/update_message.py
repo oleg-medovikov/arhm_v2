@@ -50,7 +50,9 @@ async def update_message(
                     chat_id=log.chat_id,
                     message_id=log.message_id,
                     # надо достать айдишник картинки с серверов телеги
-                    media=InputMediaPhoto(media=image.file_id, caption=MESS),
+                    media=InputMediaPhoto(
+                        media=image.file_id, caption=MESS, parse_mode=mode
+                    ),
                     reply_markup=keyboard,
                 )
             )
