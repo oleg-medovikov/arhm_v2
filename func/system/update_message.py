@@ -1,5 +1,5 @@
 from typing import Optional
-from aiogram.types import InputMediaPhoto, Message, InlineKeyboardMarkup
+from aiogram.types import InputMediaPhoto, Message, InlineKeyboardMarkup, message_id
 from aiogram.methods.delete_message import DeleteMessage
 from aiogram.methods.edit_message_media import EditMessageMedia
 from aiogram.exceptions import TelegramBadRequest
@@ -39,7 +39,8 @@ async def update_message(
             image = await Image.query.where(Image.name == log.name).gino.first()
 
     # в любом случае удаляем комманду пользователя, так как  она не нужна
-    await _delete_mess(bot, message.chat.id, message.message_id)
+    if log.message_id != message.message_id:
+        await _delete_mess(bot, message.chat.id, message.message_id)
 
     if log and image:
         # если сообщение есть, то нужно его апдейтить
