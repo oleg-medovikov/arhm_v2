@@ -4,7 +4,7 @@ from aiogram import F, Bot
 from sqlalchemy import and_, false
 
 
-from func import update_message, add_keyboard, update_sticker, person_status_card
+from func import update_message, add_keyboard, person_status_card
 from mdls import Person, ActionLog
 from call import CallPerson, CallInventory, CallAction
 
@@ -37,7 +37,9 @@ async def continue_game(callback: CallbackQuery, callback_data: CallPerson, bot:
                     event=action.e_id,
                 ).pack(),
             }
-            return await update_message(callback.message, mess, add_keyboard(DICT))
+            return await update_message(
+                bot, callback.message, mess, add_keyboard(DICT), image_name="ктулху"
+            )
     # ===============================================
 
     mess = person_status_card(person)
@@ -67,5 +69,6 @@ async def continue_game(callback: CallbackQuery, callback_data: CallPerson, bot:
         ).pack(),
     }
 
-    await update_message(callback.message, mess, add_keyboard(DICT))
-    return await update_sticker(callback.from_user.id, None, bot)
+    return await update_message(
+        bot, callback.message, mess, add_keyboard(DICT), image_name=person.profession
+    )

@@ -24,6 +24,7 @@ async def add_Image(message: Message, bot: Bot):
 
     # Получаем объект photo
     photo = message.photo[-1]
+    print(photo)
     # Получаем файл объекта photo
     file = await bot.get_file(photo.file_id)
     # Скачиваем файл
@@ -40,7 +41,13 @@ async def add_Image(message: Message, bot: Bot):
 
     # если картинки нет в баз, записываем ее в базу
     # и спрашиваем название у пользователя
-    image = await Image.create(name="", category="", file=binary_data, u_id=user.id)
+    image = await Image.create(
+        name="",
+        category="",
+        file_id=photo.file_id,
+        file=binary_data,
+        u_id=user.id,
+    )
 
     mess = f"Я запомнил картинку, ее id: \n {image.id}".replace("_", "\\_")
 

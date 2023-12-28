@@ -7,8 +7,8 @@ from aiogram import Bot
 from func import (
     get_chat_fio,
     add_keyboard,
-    update_sticker,
     update_message,
+    # update_sticker,
 )
 from mdls import MessText, User
 from call import CallUser
@@ -33,4 +33,6 @@ async def command_start_handler(message: Message, bot: Bot):
     }
 
     # await update_sticker(message.chat.id, "ктулху", bot)
-    return await update_message(bot, message, mess.text, add_keyboard(DICT), image_id=1)
+    return await update_message(
+        bot, message, mess.text, add_keyboard(DICT), image_name="ктулху"
+    )

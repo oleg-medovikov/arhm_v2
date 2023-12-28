@@ -40,6 +40,7 @@ from .admin.add_Image_name import (
     ask_Image_category,
     update_Image,
 )
+from .admin.watch_Image import watch_Image
 
 __all__ = [
     # start
@@ -80,4 +81,5 @@ __all__ = [
     "ask_Image_name",
     "ask_Image_category",
     "update_Image",
+    "watch_Image",
 ]

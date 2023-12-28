@@ -36,7 +36,7 @@ async def ask_Image_category(message: Message, state: FSMContext):
 
 
 @router.message(NewImage.category)
-async def update_Image(message: Message, state: FSMContext, bot: Bot):
+async def update_Image(message: Message, state: FSMContext):
     await state.update_data(category=message.text)
     user_data = await state.get_data()
     image = await Image.get(user_data["image_id"])
@@ -46,5 +46,5 @@ async def update_Image(message: Message, state: FSMContext, bot: Bot):
     # Сброс состояния и сохранённых данных у пользователя
     await state.clear()
 
-    await bot.send_sticker(message.chat.id, image.file)
+    # await bot.send_sticker(message.chat.id, image.file)
     return await message.answer(f'Картинка сохранена\nid: {user_data["image_id"]}')

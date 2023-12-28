@@ -1,6 +1,6 @@
 from disp.start import router
 from aiogram.types import CallbackQuery
-from aiogram import F
+from aiogram import F, Bot
 from sqlalchemy import and_, false
 
 from func import add_keyboard, update_message
@@ -10,7 +10,7 @@ from call import CallUser, CallPerson
 
 
 @router.callback_query(CallUser.filter(F.action == "start_new_game"))
-async def start_new_game(callback: CallbackQuery, callback_data: CallUser):
+async def start_new_game(callback: CallbackQuery, callback_data: CallUser, bot: Bot):
     """
     Если есть живой персонаж, говорим, что уже видели игрока, предлагаем
     продолжить игру или прочесть правила.
@@ -28,7 +28,9 @@ async def start_new_game(callback: CallbackQuery, callback_data: CallUser):
         DICT = {
             "регистрация у шерифа": CallUser(action="register", user_id=user_id).pack(),
         }
-        return await update_message(callback.message, mess.text, add_keyboard(DICT))
+        return await update_message(
+            bot, callback.message, mess.text, add_keyboard(DICT)
+        )
 
     mess = await MessText.get("hello_exist_person")
     DICT = {
@@ -39,4 +41,4 @@ async def start_new_game(callback: CallbackQuery, callback_data: CallUser):
             i_id=person.i_id,
         ).pack(),
     }
-    return await update_message(callback.message, mess.text, add_keyboard(DICT))
+    return await update_message(bot, callback.message, mess.text, add_keyboard(DICT))

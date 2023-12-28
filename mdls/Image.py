@@ -9,6 +9,7 @@ class Image(db.Model):
     id = db.Column(db.SmallInteger, primary_key=True)
     name = db.Column(db.String)
     category = db.Column(db.String)
+    file_id = db.Column(db.String)
     file = db.Column(db.LargeBinary)
 
     u_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
