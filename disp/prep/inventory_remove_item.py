@@ -1,6 +1,6 @@
 from disp.prep import router
 from aiogram.types import CallbackQuery
-from aiogram import F
+from aiogram import F, Bot
 
 
 from func import update_message, add_keyboard, item_remove
@@ -9,7 +9,9 @@ from mdls import Person, Item, Inventory
 
 
 @router.callback_query(CallInventory.filter(F.action == "inventory_remove_item"))
-async def inventory_remove_item(callback: CallbackQuery, callback_data: CallInventory):
+async def inventory_remove_item(
+    callback: CallbackQuery, callback_data: CallInventory, bot: Bot
+):
     """
     Снятие предмета с тела.
     перемещение в сумку и убирание эффектов
@@ -31,7 +33,7 @@ async def inventory_remove_item(callback: CallbackQuery, callback_data: CallInve
             equip=True,
             item=item.id,
         ).pack()
-        return await update_message(callback.message, mess, add_keyboard(DICT))
+        return await update_message(bot, callback.message, mess, add_keyboard(DICT))
 
     # если удалось снять без условий, возвращаемся в просмотр сумки
     if check and len(DICT) == 0:
@@ -43,7 +45,7 @@ async def inventory_remove_item(callback: CallbackQuery, callback_data: CallInve
             equip=False,
             item=item.id,
         ).pack()
-        return await update_message(callback.message, mess, add_keyboard(DICT))
+        return await update_message(bot, callback.message, mess, add_keyboard(DICT))
 
     # если есть выбор альтернативных предметов - создаем кнопки на using_item
     dict_ = {}
@@ -56,4 +58,4 @@ async def inventory_remove_item(callback: CallbackQuery, callback_data: CallInve
             equip=callback_data.equip,
             item=key,
         ).pack()
-    return await update_message(callback.message, mess, add_keyboard(dict_))
+    return await update_message(bot, callback.message, mess, add_keyboard(dict_))

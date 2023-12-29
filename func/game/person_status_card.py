@@ -16,7 +16,7 @@ def person_status_card(PERS: "Person") -> str:
     ).strftime("%H:%M")
 
     LIST = (
-        f"*Карточка персонажа*\n*ИМЯ:* {PERS.gamename}, {PERS.profession}",
+        f"*Карточка персонажа*\n*Имя:* {PERS.gamename}, {PERS.profession}",
         f'\n*Зарегистрирован{("" if PERS.sex else "а")}:* {DATE}',
         f"\n*Проведено дней в Археме:* {DAYS}",
         # "\n ``` ",

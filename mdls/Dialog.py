@@ -8,7 +8,7 @@ class Dialog(db.Model):
 
     d_id = db.Column(db.SmallInteger)
     q_id = db.Column(db.Integer)
-    stick_id = db.Column(db.SmallInteger(), db.ForeignKey("sticker.id"), nullable=True)
+    image_id = db.Column(db.SmallInteger(), db.ForeignKey("image.id"), nullable=True)
     name = db.Column(db.String)
     question = db.Column(db.String)
     answers = db.Column(db.ARRAY(db.String))
@@ -24,13 +24,13 @@ class Dialog(db.Model):
     date_update = db.Column(db.DateTime(), default=datetime.now())
 
     @property
-    def sticker(self):
-        """The sticker property."""
-        return self._sticker
+    def image(self):
+        """The image property."""
+        return self._image
 
-    @sticker.setter
-    def sticker(self, value):
-        self._sticker = value
+    @image.setter
+    def image(self, value):
+        self._image = value
 
     @property
     def user(self):

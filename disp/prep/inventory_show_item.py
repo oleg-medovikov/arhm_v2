@@ -3,7 +3,7 @@ from aiogram.types import CallbackQuery
 from aiogram import F, Bot
 
 
-from func import update_message, add_keyboard, update_sticker, item_description
+from func import update_message, add_keyboard, item_description
 from call import CallInventory
 from mdls import Item, Sticker
 
@@ -22,7 +22,10 @@ async def inventory_show_item(
     if item.stick_id is not None:
         sticker = await Sticker.get(item.stick_id)
         if sticker is not None:
-            await update_sticker(callback.from_user.id, sticker.name, bot)
+            image = sticker.name
+            # await update_sticker(callback.from_user.id, sticker.name, bot)
+        else:
+            image = None
 
     DICT = {}
 
@@ -63,5 +66,9 @@ async def inventory_show_item(
     ).pack()
 
     return await update_message(
-        callback.message, item_description(item), add_keyboard(DICT)
+        bot,
+        callback.message,
+        item_description(item),
+        add_keyboard(DICT),
+        image_name=image,
     )

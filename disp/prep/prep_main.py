@@ -3,7 +3,7 @@ from aiogram.types import CallbackQuery
 from aiogram import F, Bot
 
 
-from func import update_message, add_keyboard, update_sticker
+from func import update_message, add_keyboard
 from mdls import MessText
 from call import CallPerson, CallNotes
 
@@ -11,7 +11,7 @@ from call import CallPerson, CallNotes
 @router.callback_query(CallPerson.filter(F.action == "prep_main"))
 async def prep_main(callback: CallbackQuery, callback_data: CallPerson, bot: Bot):
     mess = await MessText.get(f"prep_main_{callback_data.profession}")
-    await update_sticker(callback.from_user.id, "студентка", bot)
+    # await update_sticker(callback.from_user.id, "студентка", bot)
 
     DICT = {
         "записи в дневнике": CallNotes(
@@ -29,4 +29,6 @@ async def prep_main(callback: CallbackQuery, callback_data: CallPerson, bot: Bot
             i_id=callback_data.i_id,
         ).pack(),
     }
-    await update_message(callback.message, mess.text, add_keyboard(DICT))
+    await update_message(
+        bot, callback.message, mess.text, add_keyboard(DICT), image_name="дневник"
+    )

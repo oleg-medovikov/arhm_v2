@@ -1,6 +1,6 @@
 from disp.prep import router
 from aiogram.types import CallbackQuery
-from aiogram import F
+from aiogram import F, Bot
 
 
 from func import update_message, add_keyboard
@@ -9,7 +9,9 @@ from mdls import Person, Item, Inventory, MessText, ItemDrop
 
 
 @router.callback_query(CallInventory.filter(F.action == "inventory_drop_item"))
-async def inventory_drop_item(callback: CallbackQuery, callback_data: CallInventory):
+async def inventory_drop_item(
+    callback: CallbackQuery, callback_data: CallInventory, bot: Bot
+):
     """
     Персонаж оставляет предмет на локации.
     предлагается оставить записку вместе с предметом,
@@ -46,12 +48,14 @@ async def inventory_drop_item(callback: CallbackQuery, callback_data: CallInvent
             item=item.id,
         ).pack(),
     }
-    return await update_message(callback.message, item.mess_drop, add_keyboard(DICT))
+    return await update_message(
+        bot, callback.message, item.mess_drop, add_keyboard(DICT)
+    )
 
 
 @router.callback_query(CallInventory.filter(F.action == "inventory_drop_item_end"))
 async def inventory_drop_item_end(
-    callback: CallbackQuery, callback_data: CallInventory
+    callback: CallbackQuery, callback_data: CallInventory, bot: Bot
 ):
     """
     выкинуть предмет можно только из сумки
@@ -83,4 +87,4 @@ async def inventory_drop_item_end(
             item=callback_data.item,
         ).pack()
     }
-    return await update_message(callback.message, mess.text, add_keyboard(DICT))
+    return await update_message(bot, callback.message, mess.text, add_keyboard(DICT))

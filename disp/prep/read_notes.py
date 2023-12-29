@@ -1,6 +1,6 @@
 from disp.prep import router
 from aiogram.types import CallbackQuery
-from aiogram import F
+from aiogram import F, Bot
 
 
 from func import update_message, add_keyboard, person_note_read
@@ -9,7 +9,7 @@ from call import CallPerson, CallNotes
 
 
 @router.callback_query(CallNotes.filter(F.action == "read_notes"))
-async def read_notes(callback: CallbackQuery, callback_data: CallNotes):
+async def read_notes(callback: CallbackQuery, callback_data: CallNotes, bot: Bot):
     """
     кароч тут вытаскиваются все записи разом в отсортированном виде
     а потом выбираем запись по геймтайму, который тут не геймтайм,
@@ -89,4 +89,11 @@ async def read_notes(callback: CallbackQuery, callback_data: CallNotes):
                 i_id=callback_data.i_id,
             ).pack(),
         }
-    await update_message(callback.message, mess, add_keyboard(DICT, True), True)
+    await update_message(
+        bot,
+        callback.message,
+        mess,
+        add_keyboard(DICT, True),
+        True,
+        image_name="дневник",
+    )

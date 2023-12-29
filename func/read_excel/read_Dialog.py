@@ -11,7 +11,7 @@ async def read_Dialog(user: User) -> str:
         usecols=[
             "d_id",
             "q_id",
-            "stick_id",
+            "image_id",
             "name",
             "question",
             "answers",
@@ -53,7 +53,7 @@ async def read_Dialog(user: User) -> str:
             and_(
                 Dialog.d_id == row["d_id"],
                 Dialog.q_id == row["q_id"],
-                Dialog.stick_id == row["stick_id"],
+                Dialog.image_id == row["image_id"],
                 Dialog.name == row["name"],
                 Dialog.question == row["question"],
             )
@@ -66,7 +66,7 @@ async def read_Dialog(user: User) -> str:
         await Dialog.create(
             d_id=row["d_id"],
             q_id=row["q_id"],
-            stick_id=row["stick_id"],
+            image_id=row["image_id"],
             name=row["name"],
             question=row["question"],
             answers=row["answers"],

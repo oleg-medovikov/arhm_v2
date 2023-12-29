@@ -10,7 +10,7 @@ async def get_all_Dialog() -> "DataFrame":
             [
                 Dialog.d_id,
                 Dialog.q_id,
-                Dialog.stick_id,
+                Dialog.image_id,
                 Dialog.name,
                 Dialog.question,
                 Dialog.answers,
@@ -34,7 +34,7 @@ async def get_all_Dialog() -> "DataFrame":
         columns=[
             "d_id",
             "q_id",
-            "stick_id",
+            "image_id",
             "name",
             "question",
             "answers",

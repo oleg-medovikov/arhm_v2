@@ -16,7 +16,7 @@ async def inventory_main(
     """
     mess, items = await inventory_show(callback_data.i_id, callback_data.equip)
     # стикер с изображением персонажа
-    await update_sticker(callback.from_user.id, callback_data.profession, bot)
+    # await update_sticker(callback.from_user.id, callback_data.profession, bot)
 
     DICT = {}
     # список кнопок с предметами
@@ -58,4 +58,6 @@ async def inventory_main(
             i_id=callback_data.i_id,
         ).pack()
 
-    await update_message(callback.message, mess, add_keyboard(DICT))
+    await update_message(
+        bot, callback.message, mess, add_keyboard(DICT), image_name="дневник"
+    )
