@@ -21,6 +21,12 @@ async def prep_main(callback: CallbackQuery, callback_data: CallPerson, bot: Bot
             i_id=callback_data.i_id,
             gametime=-1,
         ).pack(),
+        "ваша фотокарточка": CallPerson(
+            action="avatar_main",
+            person_id=callback_data.person_id,
+            profession=callback_data.profession,
+            i_id=callback_data.i_id,
+        ).pack(),
         # "карта": "map",
         "назад": CallPerson(
             action="continue_game",

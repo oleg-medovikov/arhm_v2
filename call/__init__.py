@@ -1,3 +1,4 @@
+from .CallAny import CallAny
 from .CallSticker import CallSticker
 from .CallUser import CallUser
 from .CallSex import CallSex
@@ -11,6 +12,7 @@ from .CallEvent import CallEvent
 from .CallImage import CallImage
 
 __all__ = [
+    "CallAny",
     "CallSticker",
     "CallUser",
     "CallPerson",

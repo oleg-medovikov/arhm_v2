@@ -122,9 +122,7 @@ async def register_6_end(callback: CallbackQuery, state: FSMContext, bot: Bot):
         mess = mess.text + f"\n{value}\ufe0f\u20e3"
     else:
         mess = f"\n{value}\ufe0f\u20e3"
-    message = await update_message(
-        bot, callback.message, mess, None, image_name="ктулху"
-    )
+    await update_message(bot, callback.message, mess, None, image_name="ктулху")
     # даем пользователю прочитать и меняем сообщение
     # тут же создаем нового персонажа
     user_data = await state.get_data()
@@ -156,5 +154,5 @@ async def register_6_end(callback: CallbackQuery, state: FSMContext, bot: Bot):
     # await update_sticker(callback.from_user.id, "шериф", bot)
     mess = await MessText.get(mess_name)
     return await update_message(
-        bot, message, mess.text, add_keyboard(DICT), image_name="шериф"
+        bot, callback.message, mess.text, add_keyboard(DICT), image_name="шериф"
     )

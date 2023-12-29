@@ -8,7 +8,6 @@ from func import (
     get_chat_fio,
     add_keyboard,
     update_message,
-    # update_sticker,
 )
 from mdls import MessText, User
 from call import CallUser
@@ -32,7 +31,6 @@ async def command_start_handler(message: Message, bot: Bot):
         "Согласиться": CallUser(action="start_new_game", user_id=user.id).pack(),
     }
 
-    # await update_sticker(message.chat.id, "ктулху", bot)
     return await update_message(
         bot, message, mess.text, add_keyboard(DICT), image_name="ктулху"
     )

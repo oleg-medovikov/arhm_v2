@@ -21,6 +21,7 @@ from .Effect import Effect
 from .PersonEffect import PersonEffect
 from .Image import Image
 from .ImageLog import ImageLog
+from .UserImage import UserImage
 
 __all__ = [
     "User",
@@ -46,4 +47,5 @@ __all__ = [
     "PersonEffect",
     "Image",
     "ImageLog",
+    "UserImage",
 ]

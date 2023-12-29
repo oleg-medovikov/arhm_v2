@@ -70,5 +70,10 @@ async def continue_game(callback: CallbackQuery, callback_data: CallPerson, bot:
     }
 
     return await update_message(
-        bot, callback.message, mess, add_keyboard(DICT), image_name=person.profession
+        bot,
+        callback.message,
+        mess,
+        add_keyboard(DICT),
+        image_user=person.avatar,
+        image_name=person.profession,
     )

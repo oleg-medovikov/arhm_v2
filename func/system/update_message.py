@@ -4,10 +4,11 @@ from aiogram.methods.delete_message import DeleteMessage
 from aiogram.methods.edit_message_media import EditMessageMedia
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.exceptions import TelegramNotFound
+from uuid import UUID
 
 from aiogram import Bot
 
-from mdls import Image, ImageLog
+from mdls import Image, UserImage, ImageLog
 
 
 async def update_message(
@@ -16,10 +17,13 @@ async def update_message(
     MESS: str,
     keyboard: Optional[InlineKeyboardMarkup],
     html: bool = False,
-    image_id: Optional[int] = None,
+    image_user: Optional[UUID] = None,
     image_name: Optional[str] = None,
 ):
-    "изменение сообщения с обработкой исключений"
+    """
+    изменение сообщения с обработкой исключений
+    запара с наличием пользовательских картинок, которые необходимо не перепутать с
+    """
     if message is None:
         return
 
@@ -28,15 +32,20 @@ async def update_message(
     # ищем логи сообщений
     log = await ImageLog.query.where(ImageLog.chat_id == message.chat.id).gino.first()
     # ищем картинку в базе
-    if image_name:
+    if image_user:
+        image = await UserImage.where(UserImage.guid == UUID(log.name))
+        image.name = str(image.guid)
+    elif image_name:
         image = await Image.query.where(Image.name == image_name).gino.first()
-    elif image_id:
-        image = await Image.get(image_id)
     else:
         image = None
         # если не указана картинка смотрим, что там в логе
         if log and log.name:
-            image = await Image.query.where(Image.name == log.name).gino.first()
+            if _is_valid_uuid(log.name):
+                image = await UserImage.where(UserImage.guid == UUID(log.name))
+                image.name = str(image.guid)
+            else:
+                image = await Image.query.where(Image.name == log.name).gino.first()
 
     # в любом случае удаляем комманду пользователя, так как  она не нужна
     if log.message_id != message.message_id:
@@ -64,6 +73,19 @@ async def update_message(
             await _send_new_mess(message, MESS, keyboard, mode, image)
     else:
         await _send_new_mess(message, MESS, keyboard, mode, None)
+
+
+async def _is_valid_uuid(uuid_string: str):
+    """
+    так как в логе будет храниться строка нужна проверка
+    является ли строка uuid
+    """
+    uuid_string = uuid_string.replace("UUID('", "").replace("')", "")
+    try:
+        UUID(uuid_string)
+        return True
+    except ValueError:
+        return False
 
 
 async def _delete_mess(bot, chat_id: int, mess_id: int):

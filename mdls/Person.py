@@ -1,6 +1,8 @@
 from base import db
 from datetime import datetime
 
+from sqlalchemy.dialects.postgresql import UUID
+
 
 class Person(db.Model):
     __tablename__ = "person"
@@ -14,6 +16,7 @@ class Person(db.Model):
     gamename = db.Column(db.String(length=50))
     sex = db.Column(db.Boolean)
     profession = db.Column(db.String(length=20))
+    avatar = db.Column(UUID, db.ForeignKey("user_image.guid"), nullable=True)
     create_date = db.Column(db.DateTime, default=datetime.now())
 
     gametime = db.Column(db.SmallInteger, default=1)
@@ -44,6 +47,24 @@ class Person(db.Model):
 
     hunger = db.Column(db.SmallInteger, default=0)
     weary = db.Column(db.SmallInteger, default=0)
+
+    def param_to_str(self):
+        list_ = [
+            "id",
+            "loc_id",
+            "i_id",
+            "profession",
+            "avatar",
+            "sex",
+            "gametime",
+            "stage",
+        ]
+
+        d = {key: value for key, value in self.to_dict().items if key in list_}
+        string = str(d)
+        string = string.replace(" ", "")
+        string = string.replace("UUID(", "").replace(")", "")
+        return string
 
     @property
     def user(self):
