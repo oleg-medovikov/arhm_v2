@@ -10,7 +10,7 @@ from func import (
     update_message,
 )
 from mdls import MessText, User
-from call import CallUser
+from call import CallAny
 
 
 @router.message(CommandStart())
@@ -28,7 +28,11 @@ async def command_start_handler(message: Message, bot: Bot):
 
     mess = await MessText.query.where(MessText.name == "disclaimer").gino.first()
     DICT = {
-        "Согласиться": CallUser(action="start_new_game", user_id=user.id).pack(),
+        "Согласиться": CallAny(
+            action="start_new_game",
+            person="",
+            meta=CallAny.pack_meta({"user_id": user.id}),
+        ).pack(),
     }
 
     return await update_message(

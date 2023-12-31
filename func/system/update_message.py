@@ -33,7 +33,7 @@ async def update_message(
     log = await ImageLog.query.where(ImageLog.chat_id == message.chat.id).gino.first()
     # ищем картинку в базе
     if image_user:
-        image = await UserImage.where(UserImage.guid == UUID(log.name))
+        image = await UserImage.query.where(UserImage.guid == UUID(log.name))
         image.name = str(image.guid)
     elif image_name:
         image = await Image.query.where(Image.name == image_name).gino.first()
@@ -41,8 +41,9 @@ async def update_message(
         image = None
         # если не указана картинка смотрим, что там в логе
         if log and log.name:
-            if _is_valid_uuid(log.name):
-                image = await UserImage.where(UserImage.guid == UUID(log.name))
+            if _is_valid_uuid(log.name) is True:
+                print(f"!!!! {log.name}")
+                image = await UserImage.query.where(UserImage.guid == UUID(log.name))
                 image.name = str(image.guid)
             else:
                 image = await Image.query.where(Image.name == log.name).gino.first()
@@ -80,12 +81,13 @@ async def _is_valid_uuid(uuid_string: str):
     так как в логе будет храниться строка нужна проверка
     является ли строка uuid
     """
-    uuid_string = uuid_string.replace("UUID('", "").replace("')", "")
+    # uuid_string = uuid_string.replace("UUID('", "").replace("')", "")
     try:
         UUID(uuid_string)
-        return True
     except ValueError:
         return False
+    else:
+        return True
 
 
 async def _delete_mess(bot, chat_id: int, mess_id: int):

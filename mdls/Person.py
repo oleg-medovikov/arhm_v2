@@ -55,15 +55,11 @@ class Person(db.Model):
             "i_id",
             "profession",
             "avatar",
-            "sex",
-            "gametime",
-            "stage",
         ]
 
-        d = {key: value for key, value in self.to_dict().items if key in list_}
-        string = str(d)
-        string = string.replace(" ", "")
-        string = string.replace("UUID(", "").replace(")", "")
+        string = ""
+        for _ in list_:
+            string += f"{getattr(self, _)},"
         return string
 
     @property
