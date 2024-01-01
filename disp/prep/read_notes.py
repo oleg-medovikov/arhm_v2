@@ -5,13 +5,13 @@ from aiogram import F, Bot
 
 from func import update_message, add_keyboard, person_note_read
 from mdls import PersonNote, NoteText
-from call import CallPerson, CallNotes
+from call import CallAny
 
 
-@router.callback_query(CallNotes.filter(F.action == "read_notes"))
-async def read_notes(callback: CallbackQuery, callback_data: CallNotes, bot: Bot):
+@router.callback_query(CallAny.filter(F.action == "read_notes"))
+async def read_notes(callback: CallbackQuery, callback_data: CallAny, bot: Bot):
     """
-    кароч тут вытаскиваются все записи разом в отсортированном виде
+    тут вытаскиваются все записи разом в отсортированном виде
     а потом выбираем запись по геймтайму, который тут не геймтайм,
     а номер записи в списке
     последний с конца -1
@@ -19,6 +19,20 @@ async def read_notes(callback: CallbackQuery, callback_data: CallNotes, bot: Bot
     предпредпоследний -3
     если берем 0 - пишем что таких записей еще не было
     """
+    # кнопка назад
+    callback_data.action = "prep_main"
+    call_back = callback_data.pack()
+    # кнопка вперед
+    callback_data.action = "read_notes"
+    callback_data.gametime += 1
+    call_next = callback_data.pack()
+    # кнопка назад
+    callback_data.action = "read_notes"
+    callback_data.gametime -= 2
+    call_prev = callback_data.pack()
+    # возвразаем значение назад
+    callback_data.gametime += 1
+
     if callback_data.gametime != 0:
         notes = (
             await PersonNote.load(note_text=NoteText)
@@ -33,61 +47,21 @@ async def read_notes(callback: CallbackQuery, callback_data: CallNotes, bot: Bot
                 "Тут старые записи, не имеющие отношения к вашим приключениям в городе"
             )
             DICT = {
-                "назад": CallPerson(
-                    action="prep_main",
-                    person_id=callback_data.person_id,
-                    profession=callback_data.profession,
-                    i_id=callback_data.i_id,
-                ).pack(),
-                "  >>": CallNotes(
-                    action="read_notes",
-                    person_id=callback_data.person_id,
-                    profession=callback_data.profession,
-                    i_id=callback_data.i_id,
-                    gametime=callback_data.gametime + 1,
-                ).pack(),
+                "назад": call_back,
+                "  >>": call_next,
             }
-
         else:
             mess = person_note_read(note)
             DICT = {
-                "<<  ": CallNotes(
-                    action="read_notes",
-                    person_id=callback_data.person_id,
-                    profession=callback_data.profession,
-                    i_id=callback_data.i_id,
-                    gametime=callback_data.gametime - 1,
-                ).pack(),
-                "назад": CallPerson(
-                    action="prep_main",
-                    person_id=callback_data.person_id,
-                    profession=callback_data.profession,
-                    i_id=callback_data.i_id,
-                ).pack(),
-                "  >>": CallNotes(
-                    action="read_notes",
-                    person_id=callback_data.person_id,
-                    profession=callback_data.profession,
-                    i_id=callback_data.i_id,
-                    gametime=callback_data.gametime + 1,
-                ).pack(),
+                "<<  ": call_prev,
+                "назад": call_back,
+                "  >>": call_next,
             }
     else:
         mess = "Более свежих записей нет"
         DICT = {
-            "<<  ": CallNotes(
-                action="read_notes",
-                person_id=callback_data.person_id,
-                profession=callback_data.profession,
-                i_id=callback_data.i_id,
-                gametime=callback_data.gametime - 1,
-            ).pack(),
-            "назад": CallPerson(
-                action="prep_main",
-                person_id=callback_data.person_id,
-                profession=callback_data.profession,
-                i_id=callback_data.i_id,
-            ).pack(),
+            "<<  ": call_prev,
+            "назад": call_back,
         }
     await update_message(
         bot,

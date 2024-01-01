@@ -1,10 +1,11 @@
 from aiogram.filters.callback_data import CallbackData
 
 
-class CallAny(CallbackData, prefix="t"):
+class CallAny(CallbackData, prefix="any"):
     action: str
     user_id: int = 0
     person_id: int = 0
+    gametime: int = 0
     inventory_id: int = 0
     item_id: int = 0
     equip: bool = False

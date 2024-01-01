@@ -76,7 +76,7 @@ async def update_message(
         await _send_new_mess(message, MESS, keyboard, mode, None)
 
 
-async def _is_valid_uuid(uuid_string: str):
+def _is_valid_uuid(uuid_string: str):
     """
     так как в логе будет храниться строка нужна проверка
     является ли строка uuid

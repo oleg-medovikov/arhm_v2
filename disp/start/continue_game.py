@@ -37,19 +37,20 @@ async def continue_game(callback: CallbackQuery, callback_data: CallAny, bot: Bo
 
     mess = person_status_card(person)
 
-    call_dnevnic = callback_data
-    call_dnevnic.action = "prep_main"
-
-    call_bag = callback_data
-    call_bag.action = "inventory_main"
-
-    call_action = callback_data
-    call_action.action = "action_main"
+    # калбек для дневника
+    callback_data.action = "prep_main"
+    call_dnevnic = callback_data.pack()
+    # калбек для инвенторя
+    callback_data.action = "inventory_main"
+    call_bag = callback_data.pack()
+    # калбек для действия
+    callback_data.action = "action_main"
+    call_action = callback_data.pack()
 
     DICT = {
-        "Дневник": call_dnevnic.pack(),
-        "Сумка": call_bag.pack(),
-        "Действие": call_action.pack(),
+        "Дневник": call_dnevnic,
+        "Сумка": call_bag,
+        "Действие": call_action,
     }
 
     return await update_message(

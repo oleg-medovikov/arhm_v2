@@ -4,20 +4,16 @@ from aiogram import F, Bot
 
 
 from func import update_message, add_keyboard, update_sticker, inventory_show
-from call import CallPerson, CallInventory
+from call import CallAny, CallPerson, CallInventory
 
 
-@router.callback_query(CallInventory.filter(F.action == "inventory_main"))
-async def inventory_main(
-    callback: CallbackQuery, callback_data: CallInventory, bot: Bot
-):
+@router.callback_query(CallAny.filter(F.action == "inventory_main"))
+async def inventory_main(callback: CallbackQuery, callback_data: CallAny, bot: Bot):
     """
     Данный роутер сразу 2 функции выполняет. просмотр инвентаря с сумкой и с экипированными вещами
     """
-    mess, items = await inventory_show(callback_data.i_id, callback_data.equip)
-    # стикер с изображением персонажа
-    # await update_sticker(callback.from_user.id, callback_data.profession, bot)
-
+    mess, items = await inventory_show(callback_data.inventory_id, callback_data.equip)
+    """
     DICT = {}
     # список кнопок с предметами
     for key, value in items.items():
@@ -61,3 +57,6 @@ async def inventory_main(
     await update_message(
         bot, callback.message, mess, add_keyboard(DICT), image_name="дневник"
     )
+    """
+
+    print("!!!! TEST")
