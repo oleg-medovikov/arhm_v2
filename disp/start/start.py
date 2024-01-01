@@ -30,8 +30,7 @@ async def command_start_handler(message: Message, bot: Bot):
     DICT = {
         "Согласиться": CallAny(
             action="start_new_game",
-            person="",
-            meta=CallAny.pack_meta({"user_id": user.id}),
+            user_id=user.id,
         ).pack(),
     }
 

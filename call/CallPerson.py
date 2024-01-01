@@ -3,4 +3,4 @@ from aiogram.filters.callback_data import CallbackData
 
 class CallPerson(CallbackData, prefix="t"):
     action: str
-    person: str
+    person_id: str

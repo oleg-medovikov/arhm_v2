@@ -2,7 +2,6 @@ from disp.start import router
 from aiogram.types import CallbackQuery
 from aiogram import F, Bot
 from sqlalchemy import and_, false
-from ast import literal_eval
 
 from func import add_keyboard, update_message
 
@@ -19,8 +18,8 @@ async def start_new_game(callback: CallbackQuery, callback_data: CallAny, bot: B
 
     """
     # распаковываем id юзера из меты
-    meta = callback_data.unpack_meta()
-    user_id = meta["user_id"]
+    user_id = callback_data.user_id
+    print(callback_data)
 
     person = await Person.query.where(
         and_(Person.u_id == user_id, Person.death == false())
@@ -28,19 +27,18 @@ async def start_new_game(callback: CallbackQuery, callback_data: CallAny, bot: B
 
     if person is None:
         mess = await MessText.get("hello_no_person")
-        DICT = {
-            "регистрация у шерифа": CallAny(
-                action="register", person="", meta=callback_data.meta
-            ).pack(),
-        }
+        call = callback_data
+        call.action = "register"
+
+        DICT = {"регистрация у шерифа": call.pack()}
         return await update_message(
             bot, callback.message, mess.text, add_keyboard(DICT)
         )
 
     mess = await MessText.get("hello_exist_person")
-    DICT = {
-        "продолжить игру": CallAny(
-            action="continue_game", person=person.param_to_str(), meta=""
-        ).pack(),
-    }
+    call = callback_data
+    call.action = "continue_game"
+    call.person_id = person.id
+
+    DICT = {"продолжить игру": call.pack()}
     return await update_message(bot, callback.message, mess.text, add_keyboard(DICT))

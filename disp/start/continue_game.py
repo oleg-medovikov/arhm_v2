@@ -12,29 +12,24 @@ from call import CallAny
 
 @router.callback_query(CallAny.filter(F.action == "continue_game"))
 async def continue_game(callback: CallbackQuery, callback_data: CallAny, bot: Bot):
-    # распаковываем калбек
-    data = callback_data.unpack_person()
     # неплохо тут сделать проверку, живой ли персонаж
-    person = await Person.get(data["id"])
+    person = await Person.get(callback_data.person_id)
 
     # тут делаем проверку на наличие незаконченных действий
     action = (
         await ActionLog.load(person=Person)
-        .query.where(and_(ActionLog.person == data["id"], ActionLog.finish == false()))
+        .query.where(and_(ActionLog.person == person.id, ActionLog.finish == false()))
         .gino.first()
     )
     if action is not None:
         if action.e_id:
             mess = "У Вас незаконченное событие!"
-            DICT = {
-                "Понятно": CallAny(
-                    action="event_start",
-                    person=person.param_to_str(),
-                    meta=CallAny.pack_meta(
-                        {"action_id": action.a_id, "event_id": action.e_id}
-                    ),
-                ).pack(),
-            }
+            call_event = callback_data
+            call_event.action = "event_start"
+            call_event.action_id = action.id
+            call_event.event_id = action.e_id
+
+            DICT = {"Понятно": call_event.pack()}
             return await update_message(
                 bot, callback.message, mess, add_keyboard(DICT), image_name="ктулху"
             )
@@ -42,20 +37,19 @@ async def continue_game(callback: CallbackQuery, callback_data: CallAny, bot: Bo
 
     mess = person_status_card(person)
 
+    call_dnevnic = callback_data
+    call_dnevnic.action = "prep_main"
+
+    call_bag = callback_data
+    call_bag.action = "inventory_main"
+
+    call_action = callback_data
+    call_action.action = "action_main"
+
     DICT = {
-        "Дневник": CallAny(
-            action="prep_main", person=person.param_to_str(), meta=""
-        ).pack(),
-        "Сумка": CallAny(
-            action="inventory_main",
-            person=person.param_to_str(),
-            meta=CallAny.pack_meta({"equip": False, "item": 0}),
-        ).pack(),
-        "Действие": CallAny(
-            action="action_main",
-            person=person.param_to_str(),
-            meta=CallAny.pack_meta({"action_id": 0, "event": 0}),
-        ).pack(),
+        "Дневник": call_dnevnic.pack(),
+        "Сумка": call_bag.pack(),
+        "Действие": call_action.pack(),
     }
 
     return await update_message(

@@ -70,11 +70,16 @@ async def _less_money(stat: int, value: int) -> bool:
 async def _time_cheack(gametime: int, VALUE: str) -> bool:
     TIME = datetime.strptime("09:00", "%H:%M") + timedelta(minutes=15 * gametime)
 
+    #    STRING = {
+    #        TIME.hour in range(0, 6): "ночь",
+    #        TIME.hour in range(6, 9): "утро",
+    #        TIME.hour in range(9, 19): "день",
+    #        TIME.hour in range(19, 24): "вечер",
+    #    }.get(True, "")
     STRING = {
-        TIME.hour in range(0, 6): "ночь",
-        TIME.hour in range(6, 9): "утро",
+        TIME.hour in range(19, 24): "ночь",
+        TIME.hour in range(0, 9): "ночь",
         TIME.hour in range(9, 19): "день",
-        TIME.hour in range(19, 24): "вечер",
     }.get(True, "")
     return STRING == VALUE
 
