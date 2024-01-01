@@ -10,7 +10,7 @@ async def get_all_Item() -> "DataFrame":
             [
                 Item.id,
                 Item.name,
-                Item.stick_id,
+                Item.image_id,
                 Item.description,
                 Item.mess_equip,
                 Item.mess_equip_fail,
@@ -40,7 +40,7 @@ async def get_all_Item() -> "DataFrame":
         columns=[
             "id",
             "name",
-            "stick_id",
+            "image_id",
             "description",
             "mess_equip",
             "mess_equip_fail",

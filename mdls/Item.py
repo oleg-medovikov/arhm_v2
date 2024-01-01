@@ -8,7 +8,7 @@ class Item(db.Model):
 
     id = db.Column(db.SmallInteger(), primary_key=True)
     name = db.Column(db.String(length=40))
-    stick_id = db.Column(db.SmallInteger(), db.ForeignKey("sticker.id"), nullable=True)
+    image_id = db.Column(db.SmallInteger(), db.ForeignKey("image.id"), nullable=True)
     description = db.Column(db.String())
     mess_equip = db.Column(db.String(), nullable=True)
     mess_equip_fail = db.Column(db.String(), nullable=True)

@@ -1,23 +1,24 @@
 from disp.prep import router
 from aiogram.types import CallbackQuery
-from aiogram import F
-
+from aiogram import F, Bot
 
 from func import update_message, add_keyboard, item_using
-from call import CallInventory
+from call import CallAny
 from mdls import Person, Item, Inventory
 
 
-@router.callback_query(CallInventory.filter(F.action == "inventory_using_item"))
-async def inventory_using_item(callback: CallbackQuery, callback_data: CallInventory):
+@router.callback_query(CallAny.filter(F.action == "inventory_using_item"))
+async def inventory_using_item(
+    callback: CallbackQuery, callback_data: CallAny, bot: Bot
+):
     """
     Использование предмета. Это в зависимости от предмета
     надеть его или использовать ради эффекта
     """
 
-    item = await Item.get(callback_data.item)
+    item = await Item.get(callback_data.item_id)
     person = await Person.get(callback_data.person_id)
-    inventory = await Inventory.get(callback_data.i_id)
+    inventory = await Inventory.get(callback_data.inventory_id)
 
     check, mess = await item_using(person, inventory, item)
     if check:
@@ -26,13 +27,7 @@ async def inventory_using_item(callback: CallbackQuery, callback_data: CallInven
         mess = "* Неудача! * \n" + mess
 
     DICT = {}
-    DICT["назад"] = CallInventory(
-        action="inventory_main",
-        profession=callback_data.profession,
-        person_id=callback_data.person_id,
-        i_id=callback_data.i_id,
-        equip=callback_data.equip,
-        item=item.id,
-    ).pack()
+    callback_data.action = "inventory_main"
+    DICT["назад"] = callback_data.pack()
 
-    await update_message(callback.message, mess, add_keyboard(DICT))
+    await update_message(bot, callback.message, mess, add_keyboard(DICT))

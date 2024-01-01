@@ -42,6 +42,7 @@ async def continue_game(callback: CallbackQuery, callback_data: CallAny, bot: Bo
     call_dnevnic = callback_data.pack()
     # калбек для инвенторя
     callback_data.action = "inventory_main"
+    callback_data.inventory_id = person.i_id
     call_bag = callback_data.pack()
     # калбек для действия
     callback_data.action = "action_main"

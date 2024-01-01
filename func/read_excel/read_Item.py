@@ -12,7 +12,7 @@ async def read_Item(user: User) -> str:
         usecols=[
             "id",
             "name",
-            "stick_id",
+            "image_id",
             "description",
             "mess_equip",
             "mess_equip_fail",
@@ -39,7 +39,7 @@ async def read_Item(user: User) -> str:
             else:
                 row[key] = {}
 
-        for key in ["stick_id", "emoji"]:
+        for key in ["image_id", "emoji"]:
             if not isinstance(row[key], int) or not isinstance(row[key], str):
                 row[key] = None
 
@@ -91,7 +91,7 @@ async def read_Item(user: User) -> str:
         if item is not None:
             await item.update(
                 name=row["name"],
-                stick_id=row["stick_id"],
+                image_id=row["image_id"],
                 description=row["description"],
                 mess_equip=row["mess_equip"],
                 mess_equip_fail=row["mess_equip_fail"],
@@ -115,7 +115,7 @@ async def read_Item(user: User) -> str:
         # если нет, то создаем новую строку
         await Item.create(
             name=row["name"],
-            stick_id=row["stick_id"],
+            image_id=row["image_id"],
             description=row["description"],
             mess_equip=row["mess_equip"],
             mess_equip_fail=row["mess_equip_fail"],

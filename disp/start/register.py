@@ -9,12 +9,11 @@ from random import randint
 from func import (
     update_message,
     add_keyboard,
-    update_sticker,
     person_create,
     person_note_add,
 )
 from mdls import MessText, PersonName
-from call import CallUser, CallSex, CallProfession, CallGamename, CallPerson
+from call import CallAny, CallSex, CallProfession, CallGamename, CallPerson
 
 
 class NewPerson(StatesGroup):
@@ -25,9 +24,9 @@ class NewPerson(StatesGroup):
     dice = State()
 
 
-@router.callback_query(CallUser.filter(F.action == "register"))
+@router.callback_query(CallAny.filter(F.action == "register"))
 async def register_1_ask_sex(
-    callback: CallbackQuery, callback_data: CallUser, state: FSMContext, bot: Bot
+    callback: CallbackQuery, callback_data: CallAny, state: FSMContext, bot: Bot
 ):
     user_id = callback_data.user_id
     await state.update_data(user_id=user_id)
