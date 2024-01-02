@@ -1,7 +1,6 @@
+from sqlalchemy import SmallInteger
 from base import db
 from datetime import datetime
-
-from sqlalchemy.dialects.postgresql import UUID
 
 
 class Person(db.Model):
@@ -16,7 +15,7 @@ class Person(db.Model):
     gamename = db.Column(db.String(length=50))
     sex = db.Column(db.Boolean)
     profession = db.Column(db.String(length=20))
-    avatar = db.Column(UUID, db.ForeignKey("user_image.guid"), nullable=True)
+    avatar = db.Column(SmallInteger, db.ForeignKey("user_image.id"), nullable=True)
     create_date = db.Column(db.DateTime, default=datetime.now())
 
     gametime = db.Column(db.SmallInteger, default=1)

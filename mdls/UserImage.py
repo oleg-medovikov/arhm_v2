@@ -1,9 +1,6 @@
 from base import db
 from datetime import datetime
 
-import uuid
-from sqlalchemy.dialects.postgresql import UUID
-
 
 class UserImage(db.Model):
     """
@@ -14,7 +11,7 @@ class UserImage(db.Model):
     __tablename__ = "user_image"
     __table_args__ = {"extend_existing": True}
 
-    guid = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4())
+    id = db.Column(db.SmallInteger, primary_key=True)
     name = db.Column(db.String)
     file_id = db.Column(db.String)
     file = db.Column(db.LargeBinary)

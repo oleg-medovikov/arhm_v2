@@ -13,7 +13,7 @@ from func import (
     person_note_add,
 )
 from mdls import MessText, PersonName
-from call import CallAny, CallSex, CallProfession, CallGamename, CallPerson
+from call import CallAny, CallSex, CallProfession, CallGamename
 
 
 class NewPerson(StatesGroup):
@@ -142,15 +142,14 @@ async def register_6_end(callback: CallbackQuery, state: FSMContext, bot: Bot):
         6: f'register_dice_{user_data["profession"]}_5-6',
     }[value]
     DICT = {
-        "уйти из полицейского участка": CallPerson(
+        "уйти из полицейского участка": CallAny(
             action="continue_game",
+            user_id=user_data["user_id"],
             person_id=person.id,
-            profession=person.profession,
-            i_id=person.i_id,
+            inventory_id=person.i_id,
         ).pack()
     }
 
-    # await update_sticker(callback.from_user.id, "шериф", bot)
     mess = await MessText.get(mess_name)
     return await update_message(
         bot, callback.message, mess.text, add_keyboard(DICT), image_name="шериф"

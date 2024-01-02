@@ -4,22 +4,27 @@ from aiogram import F, Bot
 
 from func import update_message, add_keyboard
 from mdls import User, Person, UserImage, MessText
-from call import CallPerson, CallAvatar
+from call import CallAny, CallAvatar
 
 
-@router.callback_query(CallPerson.filter(F.action == "avatar_main"))
-async def avatar_main(callback: CallbackQuery, callback_data: CallPerson, bot: Bot):
+@router.callback_query(CallAny.filter(F.action == "avatar_main"))
+async def avatar_main(callback: CallbackQuery, callback_data: CallAny, bot: Bot):
     """
     тут надо узнать, есть ли у юзера загруженные картинки,
     выдать ему список загруженных аватарок
     предложить загрузить новую картинку
     или вернуться к стандартной картинке
     """
-    images = (
-        UserImage.query.where(User.tg_id == callback.message.chat.id)
-        .join(User)
-        .gino.all()
-    )
+    if callback_data.user_id:
+        images = await UserImage.query.where(
+            UserImage.user == callback_data.user_id
+        ).gino.all()
+    else:
+        images = (
+            await UserImage.query.where(User.tg_id == callback.message.chat.id)
+            .join(User)
+            .gino.all()
+        )
 
     DICT = {}
     if not images:

@@ -1,4 +1,5 @@
 from aiogram.filters.callback_data import CallbackData
+from typing import Optional
 
 
 class CallAny(CallbackData, prefix="any"):
@@ -11,3 +12,4 @@ class CallAny(CallbackData, prefix="any"):
     equip: bool = False
     action_id: int = 0
     event_id: int = 0
+    avatar: Optional[int] = None

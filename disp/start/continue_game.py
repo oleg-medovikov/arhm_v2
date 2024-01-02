@@ -5,8 +5,6 @@ from sqlalchemy import and_, false
 
 from func import update_message, add_keyboard, person_status_card
 from mdls import Person, ActionLog
-
-# from call import CallPerson, CallInventory, CallAction
 from call import CallAny
 
 
