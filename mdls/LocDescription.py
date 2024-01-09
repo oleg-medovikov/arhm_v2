@@ -11,9 +11,9 @@ class LocDescription(db.Model):
     profession = db.Column(db.String)
     stage = db.Column(db.SmallInteger)
     description = db.Column(db.String)
-    stick_id = db.Column(db.SmallInteger(), db.ForeignKey("sticker.id"), nullable=True)
+    image_id = db.Column(db.SmallInteger, db.ForeignKey("image.id"), nullable=True)
 
-    u_id = db.Column(db.Integer(), db.ForeignKey("users.id"))
+    u_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     date_update = db.Column(db.DateTime(), default=datetime.now())
 
     @property
@@ -26,13 +26,13 @@ class LocDescription(db.Model):
         self._location = value
 
     @property
-    def sticker(self):
-        """The sticker property."""
-        return self._sticker
+    def image(self):
+        """The image property."""
+        return self._image
 
-    @sticker.setter
-    def sticker(self, value):
-        self._sticker = value
+    @image.setter
+    def image(self, value):
+        self._image = value
 
     @property
     def user(self):

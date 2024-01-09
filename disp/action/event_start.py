@@ -4,21 +4,20 @@ from aiogram import F, Bot
 from random import choices
 
 from conf import emoji
-from mdls import Sticker, Action, Event, Person, ActionLog
+from mdls import Image, Action, Event, Person, ActionLog
 from func import (
     update_message,
     add_keyboard,
-    update_sticker,
     waste_time,
     check,
     person_change,
     timedelta_to_str,
 )
-from call import CallPerson, CallAction, CallEvent
+from call import CallAny, CallAction, CallEvent
 
 
-@router.callback_query(CallAction.filter(F.action == "event_start"))
-async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: Bot):
+@router.callback_query(CallAny.filter(F.action == "event_start"))
+async def event_start(callback: CallbackQuery, callback_data: CallAny, bot: Bot):
     """
     Перед тем как начать ивент, необходимо его выбрать,
     у действия есть список ивентов и список весовых коэффициентов,
@@ -29,36 +28,39 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
     DICT = {}
     # достаем действие и выбираем ивент
     action = await Action.get(callback_data.action_id)
-    # тут нужна проверка на single_use проходил ли игрок эти разовые ивенты
-
-    # ===============
-    if callback_data.event != 0:
-        event_id = callback_data.event
+    if callback_data.event_id != 0:
+        event_id = callback_data.event_id
     elif len(action.events):
         event_id = choices(action.events, weights=action.weights)[0]
+        # тут нужна проверка на single_use проходил ли игрок эти разовые ивенты
+
+        # ===============
     else:
         # если для этого действия нет доступных ивентов
         mess = "тут нечего делать!"
-        DICT["понятно"] = CallAction(
-            action="action_main",
-            person_id=callback_data.person_id,
-            profession=callback_data.profession,
-            loc_id=callback_data.loc_id,
-            action_id=0,
-        ).pack()
-        return await update_message(callback.message, mess, add_keyboard(DICT))
+        callback_data.action = "action_main"
+        callback_data.action_id = 0
+        callback_data.event_id = 0
+        DICT["понятно"] = callback_data.pack()
+        return await update_message(bot, callback.message, mess, add_keyboard(DICT))
 
     # Достаем выбранный ивент
     event = await Event.get(event_id)
     if event is None:
-        mess = f"несуществующий евент {event_id}"
-        return await update_message(callback.message, mess, add_keyboard(DICT))
+        # это какая-то ошибка, не должно такого быть!
+        mess = f"!!! несуществующий евент {event_id}"
+        callback_data.action = "action_main"
+        callback_data.action_id = 0
+        callback_data.event_id = 0
+        DICT["понятно"] = callback_data.pack()
+        return await update_message(bot, callback.message, mess, add_keyboard(DICT))
 
     # начинаем проходить ивент!
-    # при надобности меняем стикер
-    if event.stick_id:
-        sticker = await Sticker.get(event.stick_id)
-        await update_sticker(callback.from_user.id, sticker.name, bot)
+    # при надобности меняем картинку
+    if event.image_id:
+        image = await Image.get(event.image_id)
+    else:
+        image = None
 
     if "choice" not in event.demand:
         # тратим время
@@ -70,16 +72,14 @@ async def event_start(callback: CallbackQuery, callback_data: CallAction, bot: B
         if person.death:
             # Если персонаж внезапно умер
             mess = "похоже случилось непоправимое"
-            DICT = {
-                "...": CallPerson(
-                    action="continue_game",
-                    person_id=callback_data.person_id,
-                    profession=callback_data.profession,
-                    i_id=0,
-                ).pack()
-            }
-            return await update_message(callback.message, mess, add_keyboard(DICT))
-            # если ивент с проверками, но без выбора вариантов
+            callback_data.action = "continue_game"
+
+            DICT = {"...": callback_data.pack()}
+            return await update_message(
+                bot, callback.message, mess, add_keyboard(DICT), image_name=image
+            )
+        # если ивент с проверками, но без выбора вариантов
+        # делается в одно сообщение
         mess = (
             emoji("clock")
             + " "

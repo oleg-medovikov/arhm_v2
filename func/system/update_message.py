@@ -1,10 +1,9 @@
 from typing import Optional
-from aiogram.types import InputMediaPhoto, Message, InlineKeyboardMarkup, message_id
+from aiogram.types import InputMediaPhoto, Message, InlineKeyboardMarkup
 from aiogram.methods.delete_message import DeleteMessage
 from aiogram.methods.edit_message_media import EditMessageMedia
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.exceptions import TelegramNotFound
-from uuid import UUID
 
 from aiogram import Bot
 
@@ -17,7 +16,7 @@ async def update_message(
     MESS: str,
     keyboard: Optional[InlineKeyboardMarkup],
     html: bool = False,
-    image_user: Optional[UUID] = None,
+    image_user: Optional[int] = None,
     image_name: Optional[str] = None,
 ):
     """
@@ -33,18 +32,18 @@ async def update_message(
     log = await ImageLog.query.where(ImageLog.chat_id == message.chat.id).gino.first()
     # ищем картинку в базе
     if image_user:
-        image = await UserImage.query.where(UserImage.guid == UUID(log.name))
-        image.name = str(image.guid)
+        image = await UserImage.get(image_user)
+        image.name = f"user:{image.id}"
     elif image_name:
         image = await Image.query.where(Image.name == image_name).gino.first()
     else:
         image = None
         # если не указана картинка смотрим, что там в логе
         if log and log.name:
-            if _is_valid_uuid(log.name) is True:
-                print(f"!!!! {log.name}")
-                image = await UserImage.query.where(UserImage.guid == UUID(log.name))
-                image.name = str(image.guid)
+            if "user" in log.name:
+                id_ = int(log.name.split(":")[-1])
+                image = await UserImage.get(id_)
+                image.name = f"user:{image.id}"
             else:
                 image = await Image.query.where(Image.name == log.name).gino.first()
 

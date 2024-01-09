@@ -1,10 +1,10 @@
 from disp.prep import router
-from aiogram.types import CallbackQuery, message
+from aiogram.types import CallbackQuery
 from aiogram import F, Bot
 
 from func import update_message, add_keyboard
-from mdls import User, Person, UserImage, MessText
-from call import CallAny, CallAvatar
+from mdls import User, UserImage, MessText
+from call import CallAny
 
 
 @router.callback_query(CallAny.filter(F.action == "avatar_main"))
@@ -27,40 +27,25 @@ async def avatar_main(callback: CallbackQuery, callback_data: CallAny, bot: Bot)
         )
 
     DICT = {}
+    avatar = callback_data.avatar
     if not images:
         mess = await MessText.get("avatar_main_no_foto")
     else:
         mess = await MessText.get("avatar_main_foto")
+        callback_data.action = "avatar_change"
         for image in images:
-            DICT[image.name] = CallAvatar(
-                action="avatar_change",
-                person_id=callback_data.person_id,
-                profession=callback_data.profession,
-                i_id=callback_data.i_id,
-                image_guid=str(image.guid),
-            ).pack()
+            callback_data.avatar = image.id
+            DICT[image.name] = callback_data.pack()
 
-        DICT["стандартная"] = CallAvatar(
-            action="avatar_change",
-            person_id=callback_data.person_id,
-            profession=callback_data.profession,
-            i_id=callback_data.i_id,
-            image_guid="standart",
-        ).pack()
+        callback_data.avatar = -1
+        DICT["стандартная"] = callback_data.pack()
 
-    DICT["новая фотокарточка"] = CallPerson(
-        action="avatar_upload",
-        person_id=callback_data.person_id,
-        profession=callback_data.profession,
-        i_id=callback_data.i_id,
-    ).pack()
+    callback_data.avatar = avatar
+    callback_data.action = "avatar_upload"
+    DICT["новая фотокарточка"] = callback_data.pack()
 
-    DICT["назад"] = CallPerson(
-        action="prep_main",
-        person_id=callback_data.person_id,
-        profession=callback_data.profession,
-        i_id=callback_data.i_id,
-    ).pack()
+    callback_data.action = "prep_main"
+    DICT["назад"] = callback_data.pack()
 
     await update_message(
         bot,

@@ -19,7 +19,6 @@ async def start_new_game(callback: CallbackQuery, callback_data: CallAny, bot: B
     """
     # распаковываем id юзера из меты
     user_id = callback_data.user_id
-    print(callback_data)
 
     person = await Person.query.where(
         and_(Person.u_id == user_id, Person.death == false())
