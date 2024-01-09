@@ -3,6 +3,7 @@ from aiogram.types import CallbackQuery
 from aiogram import F, Bot
 
 
+from mdls import Image
 from func import update_message, add_keyboard, inventory_show
 from call import CallAny
 
@@ -22,6 +23,10 @@ async def inventory_main(callback: CallbackQuery, callback_data: CallAny, bot: B
         DICT[value] = callback_data.pack()
 
     if callback_data.equip:
+        # картинка инвентори
+        image = await Image.query.where(Image.name == "инвентарь").gino.first()
+        if image:
+            image = image.name
         # вернуться к просмотру сумки
         callback_data.action = "inventory_main"
         callback_data.equip = False
@@ -29,6 +34,10 @@ async def inventory_main(callback: CallbackQuery, callback_data: CallAny, bot: B
 
         DICT["назад"] = callback_data.pack()
     else:
+        # картинка сумки
+        image = await Image.query.where(Image.name == "сумка").gino.first()
+        if image:
+            image = image.name
         # кнопка посмотреть экипированные предметы
         callback_data.action = "inventory_main"
         callback_data.equip = True
@@ -42,5 +51,5 @@ async def inventory_main(callback: CallbackQuery, callback_data: CallAny, bot: B
         DICT["назад"] = callback_data.pack()
 
     await update_message(
-        bot, callback.message, mess, add_keyboard(DICT), image_name="дневник"
+        bot, callback.message, mess, add_keyboard(DICT), image_name=image
     )
