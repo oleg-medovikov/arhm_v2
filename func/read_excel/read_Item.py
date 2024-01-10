@@ -40,7 +40,7 @@ async def read_Item(user: User) -> str:
                 row[key] = {}
 
         for key in ["image_id", "emoji"]:
-            if not isinstance(row[key], int) or not isinstance(row[key], str):
+            if not isinstance(row[key], int) and not isinstance(row[key], str):
                 row[key] = None
 
         # делаем из False false
@@ -65,7 +65,7 @@ async def read_Item(user: User) -> str:
             and_(
                 Item.id == row["id"],
                 Item.name == row["name"],
-                Item.stick_id == row["stick_id"],
+                Item.image_id == row["image_id"],
                 Item.description == row["description"],
                 Item.mess_equip == row["mess_equip"],
                 Item.mess_equip_fail == row["mess_equip_fail"],

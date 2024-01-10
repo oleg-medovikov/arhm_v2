@@ -29,13 +29,13 @@ class Item(db.Model):
     date_update = db.Column(db.DateTime(), default=datetime.now())
 
     @property
-    def sticker(self):
-        """The sticker property."""
-        return self._sticker
+    def image(self):
+        """The image property."""
+        return self._image
 
-    @sticker.setter
-    def sticker(self, value):
-        self._sticker = value
+    @image.setter
+    def image(self, value):
+        self._image = value
 
     @property
     def user(self):
